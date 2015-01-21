@@ -1,0 +1,23 @@
+{
+  "name": "canner-hbs-parser",
+  "version": "0.0.0",
+  "description": "canner-hbs-parser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wwwy3y3/canner-hbs-parser.git"
+  },
+  "keywords": [
+    "canner",
+    "hbs"
+  ],
+  "author": "wwwy3y3",
+  "license": "mit",
+  "bugs": {
+    "url": "https://github.com/wwwy3y3/canner-hbs-parser/issues"
+  },
+  "homepage": "https://github.com/wwwy3y3/canner-hbs-parser"
+}
