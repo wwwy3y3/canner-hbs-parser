@@ -19,17 +19,47 @@ exports.warpWith= function (source, startStr, endStr) {
 	var words= 0;
 	var offset= 0;
 	while(match= source.match(regexp)){
+		// start= (words previously cut) + (offset: the words you add in)
 		var start= words+match.index+offset, 
-			end= words+match.index+match[0].length+offset,
 			sliced= match.index+match[0].length;
+		
+		// prepend start string
+		_source= spliceSlice(_source, start, startStr);
+		// the offset start string made
+		offset += startStr.length;
+
+		// end
+		var end= words+match.index+match[0].length+offset;
+		_source= spliceSlice(_source, end, endStr);
+		offset += endStr.length;
+
+		// slice the words
+		// add the sliced length to words
 		source= source.slice(sliced);
 		words += sliced;
-		_source= spliceSlice(_source, start, startStr);
-		offset += startStr.length;
-		_source= spliceSlice(_source, end+endStr.length, endStr);
-		offset += endStr.length;
 	}
 	return _source;
+}
+
+exports.encloseHtmlTag= function (source, tag, attributes) {
+	var tag= tagBuilder(tag, attributes);
+	return exports.warpWith(source, tag.start, tag.end);
+}
+
+function tagBuilder (tag, attr) {
+	// return object with { start: '<p>', end: '</p>'}
+	 var attributestr = ""
+
+    if(attr){
+    	attributestr += " ";
+    	for(key in attr)
+    		attributestr += key + "=" + "\""+attr[key]+ "\"";
+    }
+
+    return { 
+    			start: "<" + tag + attributestr + ">",
+    			end  : "</" + tag + ">"
+    	   }
 }
 
 function spliceSlice(str, index, is_str) {
