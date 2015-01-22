@@ -24,23 +24,32 @@ exports.warpWith= function (source, startStr, endStr) {
 			sliced= match.index+match[0].length;
 		// replace $
 		if(startStr.indexOf('$'))
-			startStr= startStr.replace('$', match[0]);
+			var _startStr= startStr.replace('$', match[0]);
+		else
+			var _startStr= startStr;
+
 		// prepend start string
-		_source= spliceSlice(_source, start, startStr);
+		_source= spliceSlice(_source, start, _startStr);
 		// the offset start string made
-		offset += startStr.length;
+		offset += _startStr.length;
 
 		// end
 		if(endStr.indexOf('$'))
-			endStr= endStr.replace('$', match[0]);
+			var _endStr= endStr.replace('$', match[0]);
+		else
+			var _endStr= endStr;
+
 		var end= words+match.index+match[0].length+offset;
-		_source= spliceSlice(_source, end, endStr);
-		offset += endStr.length;
+		_source= spliceSlice(_source, end, _endStr);
+		offset += _endStr.length;
 
 		// slice the words
 		// add the sliced length to words
 		source= source.slice(sliced);
 		words += sliced;
+		// recover startStr, endStr
+		_startStr= startStr;
+		_endStr= endStr;
 	}
 	return _source;
 }
