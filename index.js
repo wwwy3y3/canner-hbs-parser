@@ -13,7 +13,7 @@ exports.findMustache= function (source) {
 	return matches;
 }
 
-exports.warpWithXTag= function (source, startStr, endStr) {
+exports.warpWith= function (source, startStr, endStr) {
 	var _source= source;
 	var match;
 	var words= 0;
