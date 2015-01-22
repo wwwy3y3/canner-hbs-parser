@@ -22,13 +22,17 @@ exports.warpWith= function (source, startStr, endStr) {
 		// start= (words previously cut) + (offset: the words you add in)
 		var start= words+match.index+offset, 
 			sliced= match.index+match[0].length;
-		
+		// replace $
+		if(startStr.indexOf('$'))
+			startStr= startStr.replace('$', match[0]);
 		// prepend start string
 		_source= spliceSlice(_source, start, startStr);
 		// the offset start string made
 		offset += startStr.length;
 
 		// end
+		if(endStr.indexOf('$'))
+			endStr= endStr.replace('$', match[0]);
 		var end= words+match.index+match[0].length+offset;
 		_source= spliceSlice(_source, end, endStr);
 		offset += endStr.length;
