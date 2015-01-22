@@ -51,9 +51,10 @@ function tagBuilder (tag, attr) {
 	 var attributestr = ""
 
     if(attr){
-    	attributestr += " ";
-    	for(key in attr)
+    	for(key in attr){
+    		attributestr += " ";
     		attributestr += key + "=" + "\""+attr[key]+ "\"";
+    	}
     }
 
     return { 
