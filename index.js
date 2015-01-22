@@ -1,4 +1,5 @@
 var regexp= /(?:[\{]+(~)?)\w+[\.\/]?[\w]+?(?:[\}]+(~)?)/;
+var keyname= /\w+[\.\/]?[\w]+/;
 
 exports.findMustache= function (source) {
 	var match;
@@ -24,7 +25,7 @@ exports.warpWith= function (source, startStr, endStr) {
 			sliced= match.index+match[0].length;
 		// replace $
 		if(startStr.indexOf('$'))
-			var _startStr= startStr.replace('$', match[0]);
+			var _startStr= startStr.replace('$', match[0].match(keyname)[0]);
 		else
 			var _startStr= startStr;
 
@@ -35,7 +36,7 @@ exports.warpWith= function (source, startStr, endStr) {
 
 		// end
 		if(endStr.indexOf('$'))
-			var _endStr= endStr.replace('$', match[0]);
+			var _endStr= endStr.replace('$', match[0].match(keyname)[0]);
 		else
 			var _endStr= endStr;
 
