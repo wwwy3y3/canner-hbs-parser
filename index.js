@@ -1,14 +1,38 @@
 var regexp= /(?:[\{]+(~)?)\w+[\.\/]?[\w]+?(?:[\}]+(~)?)/;
 var keyname= /\w+[\.\/]?[\w]+/;
+var inBlock= /(?:\{\{(~)?#)/;
+var notInBlock= /(?:\{\{(~)?\/)/;
 
-exports.findMustache= function (source) {
+exports.findMustache= function (source, skipBlock) {
 	var match;
 	var words= 0;
 	var matches= [];
+	var lastLine= '';
+	var block= false;
+
 	while(match= source.match(regexp)){
-		matches.push({ mustache: match[0], index: words+match.index });
+		// the index slice begin= the last char index of match word
 		var sliced= match.index+match[0].length;
+
+		// check if we are inBlock
+		lastLine += source.slice(0, match.index);
+		if(lastLine.match(inBlock))
+			block= true;
+		if(lastLine.match(notInBlock))
+			block= false;
+
+		// lastline= lastline we sliced
+		lastLine= source.slice(0, sliced);
 		source= source.slice(sliced);
+
+		//
+		if(skipBlock){
+			if(!block)
+				matches.push({ mustache: match[0], index: words+match.index });
+		}else{
+			matches.push({ mustache: match[0], index: words+match.index });
+		}
+			
 		words += sliced;
 	}
 	return matches;
