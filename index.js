@@ -43,33 +43,49 @@ exports.warpWith= function (source, startStr, endStr) {
 	var match;
 	var words= 0;
 	var offset= 0;
+	var lastLine= '';
+	var block= false;
 	while(match= source.match(regexp)){
 		// start= (words previously cut) + (offset: the words you add in)
 		var start= words+match.index+offset, 
 			sliced= match.index+match[0].length;
-		// replace $
-		if(startStr.indexOf('$'))
-			var _startStr= startStr.replace('$', match[0].match(keyname)[0]);
-		else
-			var _startStr= startStr;
 
-		// prepend start string
-		_source= spliceSlice(_source, start, _startStr);
-		// the offset start string made
-		offset += _startStr.length;
+		// check if we are inBlock
+		lastLine += source.slice(0, match.index);
+		if(lastLine.match(inBlock))
+			block= true;
+		if(lastLine.match(notInBlock))
+			block= false;
 
-		// end
-		if(endStr.indexOf('$'))
-			var _endStr= endStr.replace('$', match[0].match(keyname)[0]);
-		else
-			var _endStr= endStr;
+		// if skip block and not in block
+		if(!block){
+			// replace $
+			if(startStr.indexOf('$'))
+				var _startStr= startStr.replace('$', match[0].match(keyname)[0]);
+			else
+				var _startStr= startStr;
 
-		var end= words+match.index+match[0].length+offset;
-		_source= spliceSlice(_source, end, _endStr);
-		offset += _endStr.length;
+			// prepend start string
+			_source= spliceSlice(_source, start, _startStr);
+			// the offset start string made
+			offset += _startStr.length;
+
+			// end
+			if(endStr.indexOf('$'))
+				var _endStr= endStr.replace('$', match[0].match(keyname)[0]);
+			else
+				var _endStr= endStr;
+
+			var end= words+match.index+match[0].length+offset;
+			_source= spliceSlice(_source, end, _endStr);
+			offset += _endStr.length;
+		}
+			
 
 		// slice the words
 		// add the sliced length to words
+		// lastline= lastline we sliced
+		lastLine= source.slice(0, sliced);
 		source= source.slice(sliced);
 		words += sliced;
 		// recover startStr, endStr
