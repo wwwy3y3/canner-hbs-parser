@@ -1,6 +1,7 @@
 # canner-hbs-parser
 # API
 ## findMustache (source, skipBlock)
+return an array with all mustache nodes
 ### parameters
 *	source{String}: string you want to find mustaches
 *	skipBlock{Boolean}: wether you want to skip inblock mustache node or not
