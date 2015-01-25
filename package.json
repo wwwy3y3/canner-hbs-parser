@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/wwwy3y3/canner-hbs-parser/issues"
   },
-  "homepage": "https://github.com/wwwy3y3/canner-hbs-parser"
+  "homepage": "https://github.com/wwwy3y3/canner-hbs-parser",
+  "dependencies": {
+    "handlebars": "^2.0.0"
+  }
 }
