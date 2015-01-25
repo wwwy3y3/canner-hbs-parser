@@ -3,10 +3,7 @@ var source = "{{{name}}}<p>Hello, my name is {{name}}. {{cool/qwe}}. I am from {
              "{{kids.length}} kids:</p>" +
              "<ul>{{#kids}}<li>{{name}} is {{age}}</li>{{/kids}}</ul>, so hometown: {{hometown}}";
 
-var parser= require('../lib/parser');
-console.log(parser.parse(source));
 // find all mustache, include inblock mustaches
-/*
 var matches= cnHbs.findMustache(source);
 console.log(matches);
 
@@ -20,4 +17,4 @@ console.log(
 		'x-cn', 
 		{ class: "cn-key pupu me", ur: 'test', key: '$' }
 		)
-	);*/
+	);
