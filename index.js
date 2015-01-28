@@ -3,6 +3,11 @@ var keyname= /\w+[\.\/]?[\w]+/;
 var inBlock= /(?:\{\{(~)?#)/;
 var notInBlock= /(?:\{\{(~)?\/)/;
 
+exports.cnWrap= function (ast) {
+	// wrap all mustache with cn tag
+
+}
+
 exports.findMustache= function (source, skipBlock) {
 	var match;
 	var words= 0;
@@ -119,4 +124,25 @@ function tagBuilder (tag, attr) {
 
 function spliceSlice(str, index, is_str) {
   return str.slice(0, index) + (is_str || "") + str.slice(index);
+}
+
+function insert (arr, index, element) {
+	if(index<0) index=0;
+	return arr.splice(index,0,element);
+}
+
+
+function wrapNodes (programNode) {
+	var ret= [];
+	var statements= programNode.program.statements;
+	statements.forEach(function (node, index) {
+		if(node.type=='block'){
+			
+		}else{
+			// mustache
+			// wrap 
+			insert(statements, index-1)
+			insert(statements, index+2)
+		}
+	})
 }
