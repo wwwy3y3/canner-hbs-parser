@@ -2,10 +2,13 @@ var regexp= /(?:[\{]+(~)?)\w+[\.\/]?[\w]+?(?:[\}]+(~)?)/;
 var keyname= /\w+[\.\/]?[\w]+/;
 var inBlock= /(?:\{\{(~)?#)/;
 var notInBlock= /(?:\{\{(~)?\/)/;
+var Handlebars= require('handlebars');
+var contentNode= require('./lib/contentNode');
 
-exports.cnWrap= function (ast) {
+exports.cnWrap= function (source) {
+	var ast= Handlebars.parse(source);
 	// wrap all mustache with cn tag
-
+	return wrapNodes(ast);
 }
 
 exports.findMustache= function (source, skipBlock) {
@@ -133,16 +136,32 @@ function insert (arr, index, element) {
 
 
 function wrapNodes (programNode) {
-	var ret= [];
-	var statements= programNode.program.statements;
-	statements.forEach(function (node, index) {
-		if(node.type=='block'){
-			
-		}else{
-			// mustache
-			// wrap 
-			insert(statements, index-1)
-			insert(statements, index+2)
-		}
-	})
+	// if block
+	if(programNode.type=='program' || programNode.type=='block'){
+		var ret= [];
+		if(programNode.statements)
+			var statements= programNode.statements;
+		else if(programNode.program)
+			var statements= programNode.program.statements;
+		statements.forEach(function (node, index) {
+			if(node.type=='block'){
+				ret.push(wrapNodes(node));
+			}else if(node.type=='mustache'){
+				// single node
+				// wrap 
+				var tag= tagBuilder('x-cn');
+				ret.push(contentNode(tag.start));
+				ret.push(node);
+				ret.push(contentNode(tag.end));
+			}else{
+				ret.push(node);
+			}
+		})
+
+		if(programNode.statements)
+			programNode.statements= ret;
+		else if(programNode.program)
+			programNode.program.statements= ret;
+	}
+	return programNode;
 }
