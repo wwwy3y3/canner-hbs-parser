@@ -135,10 +135,11 @@ function insert (arr, index, element) {
 }
 
 
-function wrapNodes (programNode) {
+function wrapNodes (programNode, path) {
 	// if block
 	if(programNode.type=='program' || programNode.type=='block'){
 		var ret= [];
+		//path= (path)?path+'.'+:;
 		if(programNode.statements)
 			var statements= programNode.statements;
 		else if(programNode.program)
@@ -149,7 +150,16 @@ function wrapNodes (programNode) {
 			}else if(node.type=='mustache'){
 				// single node
 				// wrap 
-				var tag= tagBuilder('x-cn');
+				var tag;
+
+				// build a tag
+				console.log(programNode)
+				if(programNode.mustache && programNode.mustache.id && programNode.mustache.id.string=='each'){
+					tag= tagBuilder('x-cn', { key: programNode.mustache.params[0].string + '.'+node.id.string });
+				}else
+					tag= tagBuilder('x-cn', { key: node.id.string });
+
+				// push
 				ret.push(contentNode(tag.start));
 				ret.push(node);
 				ret.push(contentNode(tag.end));
