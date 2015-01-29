@@ -140,21 +140,21 @@ function wrapNodes (programNode, path) {
 	// if block
 	if(programNode.type=='program' || programNode.type=='block'){
 		var ret= [];
-		//path= (path)?path+'.'+:;
 		if(programNode.statements)
 			var statements= programNode.statements;
 		else if(programNode.program)
 			var statements= programNode.program.statements;
 		statements.forEach(function (node, index) {
 			if(node.type=='block'){
-				ret.push(wrapNodes(node));
+				path= (path)?path+'.'+node.mustache.params[0].string:node.mustache.params[0].string;
+				ret.push(wrapNodes(node, path));
 			}else if(node.type=='mustache'){
 				// single node
 				// wrap 
 
 				// build a tag
 				if(programNode.mustache && programNode.mustache.id && programNode.mustache.id.string=='each'){
-					var tag= '<x-cn key="'+ programNode.mustache.params[0].string+'[';
+					var tag= '<x-cn key="'+ path+'[';
 					ret.push(contentNode(tag));
 
 					//index
