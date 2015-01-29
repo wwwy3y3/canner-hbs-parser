@@ -161,7 +161,7 @@ function wrapNodes (programNode, path) {
 					ret.push(indexNode());
 
 					// start tag close
-					tag= '].'+node.id.string+'">';
+					tag= (node.id.string)?'].'+node.id.string+'">':']">';
 					ret.push(contentNode(tag));
 					
 					// add node
