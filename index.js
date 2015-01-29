@@ -4,6 +4,7 @@ var inBlock= /(?:\{\{(~)?#)/;
 var notInBlock= /(?:\{\{(~)?\/)/;
 var Handlebars= require('handlebars');
 var contentNode= require('./lib/contentNode');
+var indexNode= require('./lib/indexNode');
 
 exports.cnWrap= function (source) {
 	var ast= Handlebars.parse(source);
@@ -150,19 +151,32 @@ function wrapNodes (programNode, path) {
 			}else if(node.type=='mustache'){
 				// single node
 				// wrap 
-				var tag;
 
 				// build a tag
-				console.log(programNode)
 				if(programNode.mustache && programNode.mustache.id && programNode.mustache.id.string=='each'){
-					tag= tagBuilder('x-cn', { key: programNode.mustache.params[0].string + '.'+node.id.string });
-				}else
-					tag= tagBuilder('x-cn', { key: node.id.string });
+					var tag= '<x-cn key="'+ programNode.mustache.params[0].string+'[';
+					ret.push(contentNode(tag));
 
-				// push
-				ret.push(contentNode(tag.start));
-				ret.push(node);
-				ret.push(contentNode(tag.end));
+					//index
+					ret.push(indexNode());
+
+					// start tag close
+					tag= '].'+node.id.string+'">';
+					ret.push(contentNode(tag));
+					
+					// add node
+					ret.push(node);
+
+					// close tag
+					tag= '</x-cn>';
+					ret.push(contentNode(tag));
+				}else{
+					var tag= tagBuilder('x-cn', { key: node.id.string });
+					// push
+					ret.push(contentNode(tag.start));
+					ret.push(node);
+					ret.push(contentNode(tag.end));
+				}
 			}else{
 				ret.push(node);
 			}
