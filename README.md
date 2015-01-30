@@ -11,3 +11,6 @@ wrap source string with startStr and endStr
 
 ## encloseHtmlTag (source, tag, attributes)
 enclose all mustache(not including inblock ones) with html tag
+
+# todo
+- [ ] add more tests
