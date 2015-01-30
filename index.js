@@ -5,11 +5,12 @@ var notInBlock= /(?:\{\{(~)?\/)/;
 var Handlebars= require('handlebars');
 var contentNode= require('./lib/contentNode');
 var indexNode= require('./lib/indexNode');
+var contextPathNode= require('./lib/contextPathNode');
 
 exports.cnWrap= function (source) {
 	var ast= Handlebars.parse(source);
 	// wrap all mustache with cn tag
-	return wrapNodes(ast);
+	return wrapNodes(ast, []);
 }
 
 exports.findMustache= function (source, skipBlock) {
@@ -136,7 +137,7 @@ function insert (arr, index, element) {
 }
 
 
-function wrapNodes (programNode, path) {
+function wrapNodes (programNode) {
 	// if block
 	if(programNode.type=='program' || programNode.type=='block'){
 		var ret= [];
@@ -146,22 +147,21 @@ function wrapNodes (programNode, path) {
 			var statements= programNode.program.statements;
 		statements.forEach(function (node, index) {
 			if(node.type=='block'){
-				path= (path)?path+'.'+node.mustache.params[0].string:node.mustache.params[0].string;
-				ret.push(wrapNodes(node, path));
+				ret.push(wrapNodes(node));
 			}else if(node.type=='mustache'){
 				// single node
 				// wrap 
 
 				// build a tag
 				if(programNode.mustache && programNode.mustache.id && programNode.mustache.id.string=='each'){
-					var tag= '<x-cn key="'+ path+'[';
+					var tag= '<x-cn key="';
 					ret.push(contentNode(tag));
 
-					//index
-					ret.push(indexNode());
+					// contextPathNode
+					ret.push(contextPathNode());
 
 					// start tag close
-					tag= (node.id.string)?'].'+node.id.string+'">':']">';
+					tag= '">';
 					ret.push(contentNode(tag));
 					
 					// add node
