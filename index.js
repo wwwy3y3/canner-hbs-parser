@@ -1,16 +1,25 @@
+var Handlebars= require('handlebars');
+
+// regex
 var regexp= /(?:[\{]+(~)?)\w+[\.\/]?[\w]+?(?:[\}]+(~)?)/;
 var keyname= /\w+[\.\/]?[\w]+/;
 var inBlock= /(?:\{\{(~)?#)/;
 var notInBlock= /(?:\{\{(~)?\/)/;
-var Handlebars= require('handlebars');
+var htmlOnTag= /</g;
+var htmlOffTag= />/g;
+
+//nodes
 var contentNode= require('./lib/contentNode');
 var indexNode= require('./lib/indexNode');
 var contextPathNode= require('./lib/contextPathNode');
 
+
 exports.cnWrap= function (source) {
 	var ast= Handlebars.parse(source);
 	// wrap all mustache with cn tag
-	return wrapNodes(ast, []);
+	var arr= []
+	var node= wrapNodes(ast, 0, arr);
+	return node;
 }
 
 exports.findMustache= function (source, skipBlock) {
@@ -137,7 +146,7 @@ function insert (arr, index, element) {
 }
 
 
-function wrapNodes (programNode) {
+function wrapNodes (programNode, num, arr) {
 	// if block
 	if(programNode.type=='program' || programNode.type=='block'){
 		var ret= [];
@@ -147,10 +156,16 @@ function wrapNodes (programNode) {
 			var statements= programNode.program.statements;
 		statements.forEach(function (node, index) {
 			if(node.type=='block'){
-				ret.push(wrapNodes(node));
+				ret.push(wrapNodes(node, num, arr));
 			}else if(node.type=='mustache'){
 				// single node
 				// wrap 
+				if(num>0){
+					ret.push(node);
+					arr.push(node);
+					return;
+				}
+					
 
 				// build a tag
 				if(programNode.mustache && programNode.mustache.id && programNode.mustache.id.string=='each'){
@@ -177,6 +192,15 @@ function wrapNodes (programNode) {
 					ret.push(node);
 					ret.push(contentNode(tag.end));
 				}
+			}else if(node.type=='content'){
+				// content
+				// check if in html tag
+				var string= node.string;
+				var open= (l= string.match(htmlOnTag))?l.length:0;
+				var close= (l= string.match(htmlOffTag))?l.length:0;
+				num+= open;
+				num-= close;
+				ret.push(node);
 			}else{
 				ret.push(node);
 			}
