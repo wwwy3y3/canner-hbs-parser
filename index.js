@@ -19,7 +19,7 @@ exports.cnWrap= function (source) {
 	// wrap all mustache with cn tag
 	var arr= []
 	var node= wrapNodes(ast, 0, arr);
-	return node;
+	return {node:node, skip: arr};
 }
 
 exports.findMustache= function (source, skipBlock) {
