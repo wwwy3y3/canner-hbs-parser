@@ -9,11 +9,12 @@ var data = { "cool":"123","name": "Alan", "hometown": "Somewhere, TX",
              "pets": [{name: "bee", age: 12}, {name: "beeds", age: 14}]
          	};
 
+// cnwrap
 var wrap= cnHbs.cnWrap(source);
 var template= Handlebars.compile(wrap.node, {trackIds: true});
 var html= template(data);
-console.log(html)
-/*
+//console.log(html)
+
 // find all mustache, include inblock mustaches
 var matches= cnHbs.findMustache(source);
 console.log(matches);
@@ -28,10 +29,10 @@ console.log(
 		'x-cn', 
 		{ class: "cn-key pupu me", ur: 'test', key: '$' }
 		)
-	);*/
+	);
 
 
 // test cnWrapHtml
-//var json= require(path.resolve(__dirname, './can/canner.json'))
-//var content= require('fs').readFileSync(path.resolve(__dirname, './can/index.hbs'), 'utf8');
+var json= require(path.resolve(__dirname, './can/canner.json'))
+var content= require('fs').readFileSync(path.resolve(__dirname, './can/index.hbs'), 'utf8');
 //console.log(cnHbs.cnWrapHtml(content, json.data));
