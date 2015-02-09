@@ -1,0 +1,30 @@
+{
+	"layout": "./index.hbs",
+	"data": {
+		"title": "@wwwy3y3",
+		"description": "fork from Joe's website",
+		"icon": "./public/icon.png",
+		"greeting": "Oh, hello.",
+		"profile": "i am wwwy3y3, born in taipei, a lovely place! I love web development and enjoy my life",
+		"contact": "i am wwwy3y3, web developer, currently in love with nodeJS!",
+		"projects": [
+			{
+				"anchor": "p106",
+				"bg-color": "#f1dbf0",
+				"nav-title": "Magic Gardens",
+				"title": "Magic Gardens Poster Show at One Grand Gallery",
+				"subtitle": "Illustration—Design",
+				"images": ["./public/mg-2.png"]
+			},
+
+			{
+				"anchor": "p104",
+				"bg-color": "#ffab59",
+				"nav-title": "Happy Halloween",
+				"title": "Halloween Decorations for Self Promotion",
+				"subtitle": "Illustration—Design",
+				"images": ["./public/halloween_1.png"]
+			}
+		]
+	}	
+}

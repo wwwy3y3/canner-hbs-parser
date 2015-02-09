@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" class=" js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+
+
+   <title>{{title}}</title>
+   <meta name="description" content="{{description}}">
+  
+  <link rel="stylesheet" href="./public/style3.css">
+  <link href="./public/css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="/text/css" href="./public/MyFontsWebfontsKit.css">
+     <link rel="icon" type="image/png" href="{{icon}}">
+    <script src="./public/jquery.min.js"></script>
+    <script src="./public/modernizr.js"></script> <!-- Modernizr -->
+    <script src="./public/jquery.hover.js"></script>
+    <style id="style-1-cropbar-clipper">
+      .en-markup-crop-options {
+          top: 18px !important;
+          left: 50% !important;
+          margin-left: -100px !important;
+          width: 200px !important;
+          border: 2px rgba(255,255,255,.38) solid !important;
+          border-radius: 4px !important;
+      }
+
+      .en-markup-crop-options div div:first-of-type {
+          margin-left: 0px !important;
+      }
+    </style>
+  </head>
+
+<body>
+
+
+<a class="this, thumb" onclick='smoothScroll(document.getElementById("profile"))'>
+<div id="hero1" class="hero" style="height: 684px; background: rgb(238, 75, 84);">
+
+<img src="./public/eye.gif" id="big-img4" class="eye" style="display: none;"><img src="./public/eye2.gif" id="big-img5" class="eye" style="display: none;">
+<img src="./public/arrow-white.png" id="big-img3">
+
+
+<h6 style="color: #f7f5f5;">
+{{greeting}}
+</h6>
+
+
+</div>
+ </a>
+ 
+ 
+ 
+<a class="this, thumb" onclick="smoothScroll(document.getElementById(&#39;p106&#39;))">
+<div id="profile" class="hero" style="height: 684px;">
+
+<img src="./public/arrow-red.png" id="big-img3" class="arrow" style="display: none;">
+
+<h1 style="color: #ee4b54;">
+{{profile}}
+</h1>
+
+
+</div>
+ </a>
+
+
+
+
+ 
+ <header>
+    
+    <a id="cd-menu-trigger" class="thumb" style="display: none;"><span class="cd-menu-text"><h5>Index</h5></span></a>
+       
+ <a href="javascript:void(null)" onclick='smoothScroll(document.getElementById("contact"))' class="thumb one" id="abc" style="display: none;"><h5>Info.</h5></a>
+
+  </header>
+    
+    
+
+
+
+<main class="cd-main-content">
+<div id="content">
+  {{#each projects}}
+    <div class="projects" id="{{anchor}}">
+      <div style="background: {{bg-color}};"> 
+        <h2>{{title}}</h2>
+        <h4>{{subtitle}}</h4>
+        {{#each images}}
+          <img src="{{this}}" class="big-img2">
+        {{/each}}
+      </div>
+  </div> 
+  {{/each}}
+           
+  <div class="projects" id="contact">
+    <div style="background: #f7f5f5">
+    <h2>&#9786;</h2>
+    <h4 style="text-align:left;">{{contact}} <br><br><br><br></h4>
+    </div>
+  </div>
+
+</div>
+
+
+
+</main> <!-- cd-main-content -->
+
+  <nav id="cd-lateral-nav" style="display: none;">
+  
+    <ul class="cd-navigation cd-single-item-wrapper">
+      {{#each projects}}
+      <li>
+        <a href="javascript:void(null)" class="this" onclick='smoothScroll(document.getElementById("{{anchor}}"))'>
+          <h3>{{nav-title}}</h3>
+        </a>
+      </li>
+      {{/each}}
+    </ul> <!-- cd-single-item-wrapper -->
+
+    
+  </nav>
+  
+<script src="./public/jquery.min(1).js"></script>
+<script src="./public/main.js"></script> <!-- Resource jQuery -->
+
+
+</body></html>
