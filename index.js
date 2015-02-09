@@ -1,4 +1,5 @@
 var Handlebars= require('handlebars');
+var jsdom= require('jsdom');
 
 // regex
 var regexp= /(?:[\{]+(~)?)\w+[\.\/]?[\w]+?(?:[\}]+(~)?)/;
@@ -12,6 +13,39 @@ var htmlOffTag= />/g;
 var contentNode= require('./lib/contentNode');
 var indexNode= require('./lib/indexNode');
 var contextPathNode= require('./lib/contextPathNode');
+
+
+exports.cnWrapHtml= function (source, data) {
+	var document = jsdom(source);
+	var window = document.parentWindow;
+	
+	// body html
+	var bodyHbs= exports.cnWrap(window.document.body.outerHTML);
+	var template= Handlebars.compile(bodyHbs.node)
+	var bodyHtml= template(data);
+
+	// head
+	var headHbs= window.document.head.outerHTML;
+	var headHtml= Handlebars.compile(headHbs)(data);
+
+	// replace body
+	var newBody = document.createElement('body');
+	newBody.innerHTML= jsdom(bodyHtml).parentWindow.document.body.innerHTML;
+	window.document.documentElement.replaceChild( 
+		newBody,
+		window.document.body
+		)
+
+	// replace head
+	var newHead = document.createElement('head');
+	newHead.innerHTML= jsdom(headHtml).parentWindow.document.head.innerHTML;
+	window.document.documentElement.replaceChild( 
+		newHead,
+		window.document.head
+		)
+
+	return window.document.documentElement.outerHTML;
+}
 
 
 exports.cnWrap= function (source) {
