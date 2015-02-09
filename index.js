@@ -1,5 +1,5 @@
 var Handlebars= require('handlebars');
-var jsdom= require('jsdom');
+var jsdom= require('jsdom').jsdom;
 
 // regex
 var regexp= /(?:[\{]+(~)?)\w+[\.\/]?[\w]+?(?:[\}]+(~)?)/;
@@ -21,7 +21,7 @@ exports.cnWrapHtml= function (source, data) {
 	
 	// body html
 	var bodyHbs= exports.cnWrap(window.document.body.outerHTML);
-	var template= Handlebars.compile(bodyHbs.node)
+	var template= Handlebars.compile(bodyHbs.node, {trackIds: true})
 	var bodyHtml= template(data);
 
 	// head
