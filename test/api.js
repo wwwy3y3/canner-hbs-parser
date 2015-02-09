@@ -3,10 +3,16 @@ var path= require('path');
 var Handlebars= require('handlebars');
 var source = "{{{name}}}<p id='{{cool}}'>Hello, my name is {{name}}. I am from {{hometown}}. I have " +
              "{{kids.length}} kids:</p>" +
-             "<ul>{{#each kids}}<li>{{name}} is {{age}}</li>, also have {{#each toy}}*{{this}}{{/each}}{{/each}}</ul>, so hometown: {{hometown}}";
+             "<ul>{{#each kids}}<li>{{name}} is {{age}}</li>, also have {{#each toy}}*{{this}}{{/each}}{{/each}}, also got {{#each pets}}name: {{name}}, age: {{age}}; {{/each}}</ul>, so hometown: {{hometown}}";
 var data = { "cool":"123","name": "Alan", "hometown": "Somewhere, TX",
-             "kids": [{"name": "Jimmy", "age": "12", "toy": [1,2,3]}, {"name": "Sally", "age": "4","toy": [2,3,4,5]}]};
+             "kids": [{"name": "Jimmy", "age": "12", "toy": [1,2,3]}, {"name": "Sally", "age": "4","toy": [2,3,4,5]}],
+             "pets": [{name: "bee", age: 12}, {name: "beeds", age: 14}]
+         	};
 
+var wrap= cnHbs.cnWrap(source);
+var template= Handlebars.compile(wrap.node, {trackIds: true});
+var html= template(data);
+console.log(html)
 /*
 // find all mustache, include inblock mustaches
 var matches= cnHbs.findMustache(source);
@@ -26,6 +32,6 @@ console.log(
 
 
 // test cnWrapHtml
-var json= require(path.resolve(__dirname, './can/canner.json'))
-var content= require('fs').readFileSync(path.resolve(__dirname, './can/index.hbs'), 'utf8');
-console.log(cnHbs.cnWrapHtml(content, json.data));
+//var json= require(path.resolve(__dirname, './can/canner.json'))
+//var content= require('fs').readFileSync(path.resolve(__dirname, './can/index.hbs'), 'utf8');
+//console.log(cnHbs.cnWrapHtml(content, json.data));

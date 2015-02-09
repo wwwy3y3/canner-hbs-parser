@@ -208,6 +208,8 @@ function wrapNodes (programNode, num, arr) {
 
 					// contextPathNode
 					ret.push(contextPathNode());
+					if(node.id.string)
+						ret.push(contentNode('.'+node.id.string));
 
 					// start tag close
 					tag= '">';
