@@ -14,7 +14,9 @@ var contentNode= require('./lib/contentNode');
 var indexNode= require('./lib/indexNode');
 var contextPathNode= require('./lib/contextPathNode');
 
-
+// whole package of cnWrap to html
+// wrap only body
+// head not
 exports.cnWrapHtml= function (source, data) {
 	var document = jsdom(source);
 	var window = document.parentWindow;
