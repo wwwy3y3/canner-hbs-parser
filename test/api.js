@@ -35,4 +35,4 @@ console.log(
 // test cnWrapHtml
 var json= require(path.resolve(__dirname, './can/canner.json'))
 var content= require('fs').readFileSync(path.resolve(__dirname, './can/index.hbs'), 'utf8');
-//console.log(cnHbs.cnWrapHtml(content, json.data));
+console.log(cnHbs.cnWrapHtml(content, json.data, ["/javascripts/dist/apps_main/create.js"], ["/stylesheets/cans/create/create.css"]));

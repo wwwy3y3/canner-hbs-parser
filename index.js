@@ -17,7 +17,7 @@ var contextPathNode= require('./lib/contextPathNode');
 // whole package of cnWrap to html
 // wrap only body
 // head not
-exports.cnWrapHtml= function (source, data) {
+exports.cnWrapHtml= function (source, data, scripts, stylesheets) {
 	var document = jsdom(source);
 	var window = document.parentWindow;
 	
@@ -41,6 +41,24 @@ exports.cnWrapHtml= function (source, data) {
 	// replace head
 	var newHead = document.createElement('head');
 	newHead.innerHTML= jsdom(headHtml).parentWindow.document.head.innerHTML;
+
+	// insert scripts
+	scripts= scripts || [];
+	scripts.forEach(function (script) {
+		var ele = window.document.createElement("script");
+		ele.src = script;
+		ele.type="text/javascript";
+		newHead.appendChild(ele);
+	})
+	// insert stylesheets
+	stylesheets= stylesheets || [];
+	stylesheets.forEach(function (stylesheet) {
+		var ele = window.document.createElement("link");
+		ele.rel= 'stylesheet';
+		ele.href = stylesheet;
+		newHead.appendChild(ele);
+	})
+
 	window.document.documentElement.replaceChild( 
 		newHead,
 		window.document.head
