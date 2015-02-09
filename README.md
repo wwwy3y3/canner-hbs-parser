@@ -12,5 +12,10 @@ wrap source string with startStr and endStr
 ## encloseHtmlTag (source, tag, attributes)
 enclose all mustache(not including inblock ones) with html tag
 
+## cnWrapHtml(source, data)
+wrap the body with cn tag, not head
+add compile with data
+return html
+
 # todo
 - [ ] add more tests
