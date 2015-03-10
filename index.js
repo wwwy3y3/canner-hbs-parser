@@ -9,6 +9,7 @@ var notInBlock= /(?:\{\{(~)?\/)/;
 var htmlOnTag= /</g;
 var htmlOffTag= />/g;
 var htmlTagName= /<\/?[\w-]+/g;
+var attr= /[\w]+=/g;
 
 //nodes
 var contentNode= require('./lib/contentNode');
@@ -201,7 +202,7 @@ function insert (arr, index, element) {
 }
 
 
-function wrapNodes (programNode, num, arr, preTag) {
+function wrapNodes (programNode, num, arr, preTag, preAttr) {
 	// if block
 	if(programNode.type=='program' || programNode.type=='block'){
 		var ret= [];
@@ -211,13 +212,14 @@ function wrapNodes (programNode, num, arr, preTag) {
 			var statements= programNode.program.statements;
 		statements.forEach(function (node, index) {
 			if(node.type=='block'){
-				ret.push(wrapNodes(node, num, arr, preTag));
+				ret.push(wrapNodes(node, num, arr, preTag, preAttr));
 			}else if(node.type=='mustache'){
 				// single node
 				// wrap 
 				if(num>0){
 					ret.push(node);
 					node.preTag= preTag;
+					node.preAttr= preAttr;
 					arr.push(node);
 					return;
 				}
@@ -258,9 +260,14 @@ function wrapNodes (programNode, num, arr, preTag) {
 				var close= (l= string.match(htmlOffTag))?l.length:0;
 
 				// get preTag
+				// get the attr also
 				var s= string.match(htmlTagName);
 				if(s)
 					preTag= s[s.length-1].slice(1);
+
+				var a= string.match(attr);
+				if(a)
+					preAttr= a[a.length-1].slice(0,-1);
 
 				num+= open;
 				num-= close;
