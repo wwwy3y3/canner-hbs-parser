@@ -8,6 +8,7 @@ var inBlock= /(?:\{\{(~)?#)/;
 var notInBlock= /(?:\{\{(~)?\/)/;
 var htmlOnTag= /</g;
 var htmlOffTag= />/g;
+var htmlTagName= /<\/?[\w-]+/g;
 
 //nodes
 var contentNode= require('./lib/contentNode');
@@ -64,7 +65,7 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets) {
 		window.document.head
 		)
 
-	return window.document.documentElement.outerHTML;
+	return {html: window.document.documentElement.outerHTML, skip: bodyHbs.skip};
 }
 
 
@@ -200,7 +201,7 @@ function insert (arr, index, element) {
 }
 
 
-function wrapNodes (programNode, num, arr) {
+function wrapNodes (programNode, num, arr, preTag) {
 	// if block
 	if(programNode.type=='program' || programNode.type=='block'){
 		var ret= [];
@@ -210,12 +211,13 @@ function wrapNodes (programNode, num, arr) {
 			var statements= programNode.program.statements;
 		statements.forEach(function (node, index) {
 			if(node.type=='block'){
-				ret.push(wrapNodes(node, num, arr));
+				ret.push(wrapNodes(node, num, arr, preTag));
 			}else if(node.type=='mustache'){
 				// single node
 				// wrap 
 				if(num>0){
 					ret.push(node);
+					node.preTag= preTag;
 					arr.push(node);
 					return;
 				}
@@ -254,6 +256,12 @@ function wrapNodes (programNode, num, arr) {
 				var string= node.string;
 				var open= (l= string.match(htmlOnTag))?l.length:0;
 				var close= (l= string.match(htmlOffTag))?l.length:0;
+
+				// get preTag
+				var s= string.match(htmlTagName);
+				if(s)
+					preTag= s[s.length-1].slice(1);
+
 				num+= open;
 				num-= close;
 				ret.push(node);
