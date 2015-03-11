@@ -66,7 +66,8 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets) {
 		window.document.head
 		)
 
-	return {html: window.document.documentElement.outerHTML, skip: bodyHbs.skip};
+	//return {html: window.document.documentElement.outerHTML, skip: bodyHbs.skip};
+	return window.document.documentElement.outerHTML;
 }
 
 
