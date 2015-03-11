@@ -8,7 +8,7 @@ var data = { "cool":"123","name": "Alan", "hometown": "Somewhere, TX",
              "kids": [{"name": "Jimmy", "age": "12", "toy": [1,2,3]}, {"name": "Sally", "age": "4","toy": [2,3,4,5]}],
              "pets": [{name: "bee", age: 12}, {name: "beeds", age: 14}]
          	};
-/*
+
 // cnwrap
 var wrap= cnHbs.cnWrap(source);
 var template= Handlebars.compile(wrap.node, {trackIds: true});
@@ -30,7 +30,7 @@ console.log(
 		{ class: "cn-key pupu me", ur: 'test', key: '$' }
 		)
 	);
-*/
+
 
 // test cnWrapHtml
 var json= require(path.resolve(__dirname, './can/canner.json'))
