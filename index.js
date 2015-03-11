@@ -202,7 +202,7 @@ function insert (arr, index, element) {
 }
 
 
-function wrapNodes (programNode, num, arr, preTag, preAttr) {
+function wrapNodes (programNode, num, arr, preTag, preAttr, preNode) {
 	// if block
 	if(programNode.type=='program' || programNode.type=='block'){
 		var ret= [];
@@ -212,11 +212,20 @@ function wrapNodes (programNode, num, arr, preTag, preAttr) {
 			var statements= programNode.program.statements;
 		statements.forEach(function (node, index) {
 			if(node.type=='block'){
-				ret.push(wrapNodes(node, num, arr, preTag, preAttr));
+				ret.push(wrapNodes(node, num, arr, preTag, preAttr, preNode));
 			}else if(node.type=='mustache'){
 				// single node
 				// wrap 
 				if(num>0){
+					// if preTag= img, and preAttr= src
+					// insert a new attr to img html tag
+					if(preTag=='img' && preAttr=='src'){
+						var tagIdx= preNode.string.indexOf(preTag)+preTag.length;
+						preNode.string= preNode.string.slice(0,tagIdx) + ' cn-key="'+ node.id.string +'"' + preNode.string.slice(tagIdx);
+					}
+						
+
+					// push
 					ret.push(node);
 					node.preTag= preTag;
 					node.preAttr= preAttr;
@@ -268,6 +277,9 @@ function wrapNodes (programNode, num, arr, preTag, preAttr) {
 				var a= string.match(attr);
 				if(a)
 					preAttr= a[a.length-1].slice(0,-1);
+
+				// preNode for inserting attr
+				preNode= node;
 
 				num+= open;
 				num-= close;
