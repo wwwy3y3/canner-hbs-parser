@@ -219,9 +219,22 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode) {
 				if(num>0){
 					// if preTag= img, and preAttr= src
 					// insert a new attr to img html tag
+					// so insert a contextPath node
 					if(preTag=='img' && preAttr=='src'){
 						var tagIdx= preNode.string.indexOf(preTag)+preTag.length;
-						preNode.string= preNode.string.slice(0,tagIdx) + ' cn-key="'+ node.id.string +'"' + preNode.string.slice(tagIdx);
+
+						// slice the string to only preTag, and cn-key
+						// insert content  '"' + preNode.string.slice(tagIdx);
+						var original= preNode.string;
+						preNode.string= preNode.string.slice(0,tagIdx) + ' cn-key="';
+
+						// contextPathNode
+						ret.push(contextPathNode());
+						if(node.id.string)
+							ret.push(contentNode('.'+node.id.string));
+
+						// content
+						ret.push(contentNode('"' + original.slice(tagIdx)));
 					}
 						
 
