@@ -1,5 +1,6 @@
 var Handlebars= require('handlebars');
 var jsdom= require('jsdom').jsdom;
+var schemar= require('schemar');
 
 // regex
 var regexp= /(?:[\{]+(~)?)\w+[\.\/]?[\w]+?(?:[\}]+(~)?)/;
@@ -8,6 +9,7 @@ var inBlock= /(?:\{\{(~)?#)/;
 var notInBlock= /(?:\{\{(~)?\/)/;
 var htmlOnTag= /</g;
 var htmlOffTag= />/g;
+var htmlOnTagName= /<[\w-]+/g;
 var htmlTagName= /<\/?[\w-]+/g;
 var attr= /[\w]+=/g;
 
@@ -203,7 +205,7 @@ function insert (arr, index, element) {
 }
 
 
-function wrapNodes (programNode, num, arr, preTag, preAttr, preNode) {
+function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 	// if block
 	if(programNode.type=='program' || programNode.type=='block'){
 		var ret= [];
@@ -213,7 +215,13 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode) {
 			var statements= programNode.program.statements;
 		statements.forEach(function (node, index) {
 			if(node.type=='block'){
-				ret.push(wrapNodes(node, num, arr, preTag, preAttr, preNode));
+				// if this block is each
+				if(node.mustache.id.string=='each' && num==0){
+					console.log(doms);
+				}
+
+				// recursive push
+				ret.push(wrapNodes(node, num, arr, preTag, preAttr, preNode, doms));
 			}else if(node.type=='mustache'){
 				// single node
 				// wrap 
@@ -291,6 +299,17 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode) {
 				var a= string.match(attr);
 				if(a)
 					preAttr= a[a.length-1].slice(0,-1);
+				
+				// get parent
+				if(!doms) doms= [];
+				if(s)
+					s.forEach(function (dom) {
+						if(dom.indexOf('/')>=0) // end tag
+							doms.pop();
+						else
+							doms.push(dom);
+					})
+
 
 				// preNode for inserting attr
 				preNode= node;
