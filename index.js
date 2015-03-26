@@ -302,6 +302,10 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 				
 				// get parent
 				if(!doms) doms= [];
+
+				// in order to insert to idx
+				// we need node & right seq of dom name
+				// push node&dom#seq, like node, node.dom='div#3'
 				if(s)
 					s.forEach(function (dom) {
 						if(dom.indexOf('/')>=0) // end tag
