@@ -18,5 +18,6 @@ add compile with data
 return html
 
 # todo
+- [ ] add array support
 - [ ] add more tests
 - [x] 圖片要加上attribute可以辨識讓他上傳
