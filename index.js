@@ -217,7 +217,24 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 			if(node.type=='block'){
 				// if this block is each
 				if(node.mustache.id.string=='each' && num==0){
-					console.log(doms);
+					var parent= doms[doms.length-1];
+					var tag= parent.dom;
+					var tagIdx= parent.node.string.lastIndexOf(tag)+tag.length;
+					var param= node.mustache.params[0].string;
+					var idx= ret.indexOf(parent.node);
+					// slice the string to only preTag, and cn-key
+					// insert content  '"' + preNode.string.slice(tagIdx);
+					var original= parent.node.string;
+					parent.node.string= original.slice(0,tagIdx) + ' cn-each="';
+					//console.log()
+
+					// splice
+					ret.splice(idx+1,0, contextPathNode());
+
+					// content
+					var str= '.'+param+'"'+original.slice(tagIdx);
+					ret.splice(idx+2, 0, contentNode(str));
+	
 				}
 
 				// recursive push
@@ -310,7 +327,7 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 						if(dom.indexOf('/')>=0) // end tag
 							doms.pop();
 						else
-							doms.push(dom);
+							doms.push({ dom: dom, node: node, retIdx: ret.length });
 					})
 
 
@@ -332,3 +349,5 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 	}
 	return programNode;
 }
+
+
