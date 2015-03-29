@@ -226,7 +226,6 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 					// insert content  '"' + preNode.string.slice(tagIdx);
 					var original= parent.node.string;
 					parent.node.string= original.slice(0,tagIdx) + ' cn-each="';
-					//console.log()
 
 					// splice
 					ret.splice(idx+1,0, contextPathNode());
