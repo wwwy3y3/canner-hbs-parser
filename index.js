@@ -21,7 +21,7 @@ var contextPathNode= require('./lib/contextPathNode');
 // whole package of cnWrap to html
 // wrap only body
 // head not
-exports.cnWrapHtml= function (source, data, scripts, stylesheets) {
+exports.cnWrapHtml= function (source, data, scripts, stylesheets, token) {
 	var document = jsdom(source);
 	var window = document.parentWindow;
 	
@@ -37,10 +37,21 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets) {
 	// replace body
 	var newBody = document.createElement('body');
 	newBody.innerHTML= jsdom(bodyHtml).parentWindow.document.body.innerHTML;
+
+	// append hidden value- token
+	if(token){
+		var ele = window.document.createElement("input");
+			ele.type='hidden';
+			ele.defaultValue= token;
+			ele.id = 'api-token';
+			newBody.insertBefore(ele, newBody.firstChild);
+	}
+
 	window.document.documentElement.replaceChild( 
-		newBody,
-		window.document.body
-		)
+			newBody,
+			window.document.body
+			)
+	
 
 	// replace head
 	var newHead = document.createElement('head');
@@ -67,6 +78,7 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets) {
 		newHead,
 		window.document.head
 		)
+
 
 	//return {html: window.document.documentElement.outerHTML, skip: bodyHbs.skip};
 	return window.document.documentElement.outerHTML;
