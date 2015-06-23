@@ -35,5 +35,17 @@ console.log(
 // test cnWrapHtml
 var json= require(path.resolve(__dirname, './can/canner.json'))
 var content= require('fs').readFileSync(path.resolve(__dirname, './can/index.hbs'), 'utf8');
-var result= cnHbs.cnWrapHtml(content, json.data, ["/javascripts/dist/apps_main/create.js"], ["/stylesheets/cans/create/create.css"], '123123123');
+var opts= {
+	token: '123123',
+	insertBody: [
+		{
+			tag: 'div',
+			id: 'cn-draggable-area'
+		},
+		{
+			tag: 'div',
+			id: 'cn-popup'
+		}]
+}
+var result= cnHbs.cnWrapHtml(content, json.data, ["/javascripts/dist/apps_main/create.js"], ["/stylesheets/cans/create/create.css"], opts);
 console.log(result)

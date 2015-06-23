@@ -26,7 +26,7 @@ var contextPathNode= require('./lib/contextPathNode');
 	wrap only body, head not
 	also, wrap cn-key outside markdown segment
 */
-exports.cnWrapHtml= function (source, data, scripts, stylesheets, token) {
+exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
 	var document = Jsdom.jsdom(source);
 	var window = document.parentWindow;
 	
@@ -44,12 +44,22 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, token) {
 	newBody.innerHTML= Jsdom.jsdom(bodyHtml).parentWindow.document.body.innerHTML;
 
 	// append hidden value- token
-	if(token){
+	if(opts.token){
 		var ele = window.document.createElement("input");
 			ele.type='hidden';
-			ele.defaultValue= token;
+			ele.defaultValue= opts.token;
 			ele.id = 'api-token';
 			newBody.insertBefore(ele, newBody.firstChild);
+	}
+
+	// append body
+	if(opts.insertBody){
+		opts.insertBody.forEach(function (element) {
+			var ele = window.document.createElement(element.tag);
+			for(key in element)
+				ele[key]= element[key];
+			newBody.appendChild(ele);
+		})
 	}
 
 	window.document.documentElement.replaceChild( 
