@@ -1,6 +1,9 @@
 var Handlebars= require('handlebars');
-var jsdom= require('jsdom').jsdom;
+var Jsdom= require('jsdom');
 var schemar= require('schemar');
+var fs= require('fs');
+var path= require('path');
+var jquery = fs.readFileSync(path.resolve(__dirname, './lib/jquery-2.1.4.min.js'), {encoding: 'utf-8'});
 
 // regex
 var regexp= /(?:[\{]+(~)?)\w+[\.\/]?[\w]+?(?:[\}]+(~)?)/;
@@ -18,11 +21,13 @@ var contentNode= require('./lib/contentNode');
 var indexNode= require('./lib/indexNode');
 var contextPathNode= require('./lib/contextPathNode');
 
-// whole package of cnWrap to html
-// wrap only body
-// head not
+/*
+	whole package of cnWrap to html
+	wrap only body, head not
+	also, wrap cn-key outside markdown segment
+*/
 exports.cnWrapHtml= function (source, data, scripts, stylesheets, token) {
-	var document = jsdom(source);
+	var document = Jsdom.jsdom(source);
 	var window = document.parentWindow;
 	
 	// body html
@@ -36,7 +41,7 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, token) {
 
 	// replace body
 	var newBody = document.createElement('body');
-	newBody.innerHTML= jsdom(bodyHtml).parentWindow.document.body.innerHTML;
+	newBody.innerHTML= Jsdom.jsdom(bodyHtml).parentWindow.document.body.innerHTML;
 
 	// append hidden value- token
 	if(token){
@@ -55,7 +60,7 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, token) {
 
 	// replace head
 	var newHead = document.createElement('head');
-	newHead.innerHTML= jsdom(headHtml).parentWindow.document.head.innerHTML;
+	newHead.innerHTML= Jsdom.jsdom(headHtml).parentWindow.document.head.innerHTML;
 
 	// insert scripts
 	scripts= scripts || [];
@@ -360,5 +365,19 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 	}
 	return programNode;
 }
+/*
+function wrapMd (html, cb) {
+	jsdom.env({
+		html: html,
+		src: [jquery],
+		done: function (errors, window) {
+			var $ = window.$;
+			$('*[data-markdown]').wrap(function () {
+				// wrap with x-cn key
+			})
+			cb(window.document);
+		}
+	});
+}*/
 
 
