@@ -44,7 +44,7 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
 	newBody.innerHTML= Jsdom.jsdom(bodyHtml).parentWindow.document.body.innerHTML;
 
 	// append hidden value- token
-	if(opts.token){
+	if(opts && opts.token){
 		var ele = window.document.createElement("input");
 			ele.type='hidden';
 			ele.defaultValue= opts.token;
@@ -53,7 +53,7 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
 	}
 
 	// append body
-	if(opts.insertBody){
+	if(opts && opts.insertBody){
 		opts.insertBody.forEach(function (element) {
 			var ele = window.document.createElement(element.tag);
 			for(key in element)
