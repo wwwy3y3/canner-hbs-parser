@@ -40,7 +40,8 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
 	var headHtml= Handlebars.compile(headHbs)(data);
 
 	// replace body
-	var newBody = document.createElement('body');
+	//var newBody = document.createElement('body');
+	var newBody= document.body.cloneNode();
 	newBody.innerHTML= Jsdom.jsdom(bodyHtml).parentWindow.document.body.innerHTML;
 
 	// append hidden value- token
@@ -69,7 +70,8 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
 	
 
 	// replace head
-	var newHead = document.createElement('head');
+	//var newHead = document.createElement('head');
+	var newHead = document.head.cloneNode();
 	newHead.innerHTML= Jsdom.jsdom(headHtml).parentWindow.document.head.innerHTML;
 
 	// insert scripts
