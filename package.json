@@ -1,6 +1,6 @@
 {
   "name": "canner-hbs-parser",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "canner-hbs-parser",
   "main": "index.js",
   "scripts": {
