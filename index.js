@@ -2,6 +2,7 @@ var Handlebars= require('handlebars');
 var Jsdom= require('jsdom');
 var schemar= require('schemar');
 var fs= require('fs');
+var _= require('_');
 var path= require('path');
 var jquery = fs.readFileSync(path.resolve(__dirname, './lib/jquery-2.1.4.min.js'), {encoding: 'utf-8'});
 
@@ -27,12 +28,16 @@ var contextPathNode= require('./lib/contextPathNode');
 	also, wrap cn-key outside markdown segment
 */
 exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
+	var hbsOpts= (opts.hbs)
+		? _.merge({trackIds: true}, opts.hbs)
+		: {trackIds: true};
+		
 	var document = Jsdom.jsdom(source);
 	var window = document.parentWindow;
 	
 	// body html
 	var bodyHbs= exports.cnWrap(window.document.body.outerHTML);
-	var template= Handlebars.compile(bodyHbs.node, {trackIds: true})
+	var template= Handlebars.compile(bodyHbs.node, hbsOpts)
 	var bodyHtml= template(data);
 
 	// head
