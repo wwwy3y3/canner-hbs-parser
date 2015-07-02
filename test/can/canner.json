@@ -3,6 +3,7 @@
 	"data": {
 		"title": "@wwwy3y3",
 		"description": "fork from Joe's website",
+		"link": "http://wwwy3y3.ghost.io",
 		"icon": "./public/icon.png",
 		"greeting": "Oh, hello.",
 		"profile": "i am wwwy3y3, born in taipei, a lovely place! I love web development and enjoy my life",
