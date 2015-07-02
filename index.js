@@ -28,7 +28,7 @@ var contextPathNode= require('./lib/contextPathNode');
 	also, wrap cn-key outside markdown segment
 */
 exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
-	var hbsOpts= (opts.hbs)
+	var hbsOpts= (opts && opts.hbs)
 		? _.merge({trackIds: true}, opts.hbs)
 		: {trackIds: true};
 		
