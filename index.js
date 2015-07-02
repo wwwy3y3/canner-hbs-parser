@@ -2,7 +2,7 @@ var Handlebars= require('handlebars');
 var Jsdom= require('jsdom');
 var schemar= require('schemar');
 var fs= require('fs');
-var _= require('_');
+var _= require('lodash');
 var path= require('path');
 var jquery = fs.readFileSync(path.resolve(__dirname, './lib/jquery-2.1.4.min.js'), {encoding: 'utf-8'});
 
