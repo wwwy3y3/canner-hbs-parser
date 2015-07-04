@@ -45,6 +45,12 @@ var opts= {
 		{
 			tag: 'div',
 			id: 'cn-popup'
+		},
+		{
+			tag: 'input',
+			id: 'guide',
+			type: 'hidden',
+			value: false
 		}]
 }
 var result= cnHbs.cnWrapHtml(content, json.data, ["/javascripts/dist/apps_main/create.js"], ["/stylesheets/cans/create/create.css"], opts);

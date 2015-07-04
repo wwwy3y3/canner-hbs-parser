@@ -62,8 +62,12 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
 	if(opts && opts.insertBody){
 		opts.insertBody.forEach(function (element) {
 			var ele = window.document.createElement(element.tag);
-			for(key in element)
+			for(key in element){
 				ele[key]= element[key];
+				if(key=='value')
+					ele.setAttribute('value', element[key]);
+			}
+				
 			newBody.appendChild(ele);
 		})
 	}
