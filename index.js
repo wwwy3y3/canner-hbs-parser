@@ -283,6 +283,9 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 					// if preTag= img, and preAttr= src
 					// insert a new attr to img html tag
 					// so insert a contextPath node
+
+					// preNode string may not contain the tag we want to find
+					// so we probably need to trace back
 					if((preTag=='img' && preAttr=='src')
 						|| (preTag=='a' && preAttr=='href')){
 						preTag= '<'+preTag;
