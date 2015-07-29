@@ -296,13 +296,32 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 						var original= preNode.string;
 						preNode.string= preNode.string.slice(0,tagIdx) + ' cn-key="';
 
-						// contextPathNode
-						ret.push(contextPathNode());
-						if(node.id.string)
-							ret.push(contentNode('.'+node.id.string));
+						// if equal, means it's the last element
+						// so just push
+						if(preNode.retIdx+1==ret.length){
+							// contextPathNode
+							ret.push(contextPathNode());
+							if(node.id.string)
+								ret.push(contentNode('.'+node.id.string));
 
-						// content
-						ret.push(contentNode('"' + original.slice(tagIdx)));
+							// content
+							ret.push(contentNode('"' + original.slice(tagIdx)));
+						}else{
+							// not the last element
+							// slice, concat
+							var temp= ret.slice(0, preNode.retIdx+1);
+
+							// contextPathNode
+							temp.push(contextPathNode());
+							if(node.id.string)
+								temp.push(contentNode('.'+node.id.string));
+
+							// content
+							temp.push(contentNode('"' + original.slice(tagIdx)));
+
+							// concat
+							ret= temp.concat(ret.slice(preNode.retIdx+1));
+						}
 					}
 						
 
@@ -352,19 +371,14 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 				// get preTag
 				// get the attr also
 				var s= string.match(htmlTagName);
-				if(s)
+				if(s){
 					preTag= s[s.length-1].slice(1);
 
-				var a= string.match(attr);
-				if(a)
-					preAttr= a[a.length-1].slice(0,-1);
-				
-				// get parent
-				if(!doms) doms= [];
+					// get parent
+					if(!doms) doms= [];
 
-				// in order to insert to idx
-				// use lastIndexOf
-				if(s)
+					// in order to insert to idx
+					// use lastIndexOf
 					s.forEach(function (dom) {
 						if(dom.indexOf('/')>=0) // end tag
 							doms.pop();
@@ -372,9 +386,14 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 							doms.push({ dom: dom, node: node, retIdx: ret.length });
 					})
 
+					// preNode for inserting attr
+					preNode= node;
+					preNode.retIdx= ret.length;
+				}
 
-				// preNode for inserting attr
-				preNode= node;
+				var a= string.match(attr);
+				if(a)
+					preAttr= a[a.length-1].slice(0,-1);
 
 				num+= open;
 				num-= close;
