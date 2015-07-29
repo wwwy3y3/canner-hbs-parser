@@ -254,8 +254,10 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 		statements.forEach(function (node, index) {
 			if(node.type=='block'){
 				// if this block is each
-				if(node.mustache.id.string=='each' && num==0){
-					var parent= doms[doms.length-1];
+				// add cn-block tag wrap the each node
+				var eachBool= (node.mustache.id.string=='each' && num==0);
+				if(eachBool){
+					/*var parent= doms[doms.length-1];
 					var tag= parent.dom;
 					var tagIdx= parent.node.string.lastIndexOf(tag)+tag.length;
 					var param= node.mustache.params[0].string;
@@ -270,12 +272,30 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 
 					// content
 					var str= '.'+param+'"'+original.slice(tagIdx);
-					ret.splice(idx+2, 0, contentNode(str));
-	
+					ret.splice(idx+2, 0, contentNode(str));*/
+
+					var tag= '<x-cn type="block" key="';
+					ret.push(contentNode(tag));
+
+					// contextPathNode
+					ret.push(contextPathNode());
+
+					// param
+					// start tag close
+					var param= node.mustache.params[0].string;
+					var str= '.'+param+'" >';
+					ret.push(contentNode(str))
 				}
 
 				// recursive push
 				ret.push(wrapNodes(node, num, arr, preTag, preAttr, preNode, doms));
+
+
+				// close tag
+				if(eachBool){
+					tag= '</x-cn>';
+					ret.push(contentNode(tag));
+				}
 			}else if(node.type=='mustache'){
 				// single node
 				// wrap 
