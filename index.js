@@ -356,7 +356,7 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 
 				// build a tag
 				if(programNode.mustache && programNode.mustache.id && programNode.mustache.id.string=='each'){
-					var tag= '<x-cn key="';
+					var tag= '<x-cn type="text" key="';
 					ret.push(contentNode(tag));
 
 					// contextPathNode
@@ -375,7 +375,7 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 					tag= '</x-cn>';
 					ret.push(contentNode(tag));
 				}else{
-					var tag= tagBuilder('x-cn', { key: node.id.string });
+					var tag= tagBuilder('x-cn', { key: node.id.string, type: "text" });
 					// push
 					ret.push(contentNode(tag.start));
 					ret.push(node);
