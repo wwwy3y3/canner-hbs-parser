@@ -8,6 +8,8 @@ var data = { "cool":"123","name": "Alan", "hometown": "Somewhere, TX",
              "kids": [{"name": "Jimmy", "age": "12", "toy": [1,2,3]}, {"name": "Sally", "age": "4","toy": [2,3,4,5]}],
              "pets": [{name: "bee", age: 12}, {name: "beeds", age: 14}]
          	};
+
+//var html= '<img alt="{{alt}}" src="{{src}}" itemprop="image">'
 /*
 // cnwrap
 var wrap= cnHbs.cnWrap(source);
@@ -33,8 +35,8 @@ console.log(
 */
 
 // test cnWrapHtml
-var json= require(path.resolve(__dirname, './can/canner.json'))
-var content= require('fs').readFileSync(path.resolve(__dirname, './can/index.hbs'), 'utf8');
+var json= require(path.resolve(__dirname, './can/shopper.json'))
+var content= require('fs').readFileSync(path.resolve(__dirname, './can/shopper.hbs'), 'utf8');
 var opts= {
 	token: '123123',
 	insertBody: [
@@ -51,7 +53,14 @@ var opts= {
 			id: 'guide',
 			type: 'hidden',
 			value: false
-		}]
+		}],
+	banner: true
 }
-var result= cnHbs.cnWrapHtml(content, json.data, ["/javascripts/dist/apps_main/create.js"], ["/stylesheets/cans/create/create.css"], opts);
-console.log(result)
+var hbsParse= cnHbs.cnWrapHtml(content, json.data, ["/javascripts/dist/apps_main/create.js"], ["/stylesheets/cans/create/create.css"], opts);
+hbsParse.then(function (result) {
+	console.log(result)
+}).catch(function (err) {
+	console.log(err.stack)
+})
+//console.log(result);
+//console.log(cnHbs.cnWrapHtml(html, { alt: "123", src: "1234" }))
