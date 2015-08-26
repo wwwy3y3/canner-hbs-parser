@@ -4,7 +4,11 @@ var schemar= require('schemar');
 var fs= require('fs');
 var _= require('lodash');
 var path= require('path');
-var jquery = fs.readFileSync(path.resolve(__dirname, './lib/jquery-2.1.4.min.js'), {encoding: 'utf-8'});
+var Promise= require('bluebird');
+Promise.promisifyAll(Jsdom);
+var jQpath= path.resolve(__dirname, './lib/jquery-2.1.4.min.js');
+var jQuery= require('jquery');
+//var jquery = fs.readFileSync(path.resolve(__dirname, './lib/jquery-2.1.4.min.js'), {encoding: 'utf-8'});
 
 // regex
 var regexp= /(?:[\{]+(~)?)\w+[\.\/]?[\w]+?(?:[\}]+(~)?)/;
@@ -31,83 +35,69 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
 	var hbsOpts= (opts && opts.hbs)
 		? _.merge({trackIds: true}, opts.hbs)
 		: {trackIds: true};
+	
+	return Jsdom.envAsync(
+	  source
+	).then(function (window) {
+		var $= jQuery(window);
+		var body= window.document.body;
+		var head= window.document.head;
+
+		// body html
+		var bodyHbs= exports.cnWrap(body.innerHTML);
+		var template= Handlebars.compile(bodyHbs.node, hbsOpts)
+		var bodyHtml= template(data);
+		body.innerHTML= bodyHtml;
+
+		// head
+		var headHbs= $('head').html();
+		var headHtml= Handlebars.compile(headHbs)(data);
+
+		// replace head
+		head.innerHTML= headHtml;
+
+		// replace body innerHTML
+		// append hidden value- token
 		
-	var document = Jsdom.jsdom(source);
-	var window = document.parentWindow;
-	
-	// body html
-	var bodyHbs= exports.cnWrap(window.document.body.outerHTML);
-	var template= Handlebars.compile(bodyHbs.node, hbsOpts)
-	var bodyHtml= template(data);
+		if(opts && opts.token){
+			$('body').prepend('<input type="hidden" id="api-token" value="'+opts.token+'" />');
+		}
 
-	// head
-	var headHbs= window.document.head.outerHTML;
-	var headHtml= Handlebars.compile(headHbs)(data);
+		// append body
+		if(opts && opts.insertBody){
+			opts.insertBody.forEach(function (element) {
+				var ele = window.document.createElement(element.tag);
+				for(key in element){
+					ele[key]= element[key];
+					if(key=='value')
+						ele.setAttribute('value', element[key]);
+				}
+					
+				$('body').append(ele);
+			})
+		}
 
-	// replace body
-	//var newBody = document.createElement('body');
-	var newBody= document.body.cloneNode();
-	newBody.innerHTML= Jsdom.jsdom(bodyHtml).parentWindow.document.body.innerHTML;
-
-	// append hidden value- token
-	if(opts && opts.token){
-		var ele = window.document.createElement("input");
-			ele.type='hidden';
-			ele.defaultValue= opts.token;
-			ele.id = 'api-token';
-			newBody.insertBefore(ele, newBody.firstChild);
-	}
-
-	// append body
-	if(opts && opts.insertBody){
-		opts.insertBody.forEach(function (element) {
-			var ele = window.document.createElement(element.tag);
-			for(key in element){
-				ele[key]= element[key];
-				if(key=='value')
-					ele.setAttribute('value', element[key]);
-			}
-				
-			newBody.appendChild(ele);
+		// insert scripts
+		scripts= scripts || [];
+		scripts.forEach(function (script) {
+			var ele = window.document.createElement("script");
+			ele.src = script;
+			ele.type="text/javascript";
+			head.appendChild(ele);
 		})
-	}
+		
+		// insert stylesheets
+		stylesheets= stylesheets || [];
+		stylesheets.forEach(function (stylesheet) {
+			var ele = window.document.createElement("link");
+			ele.rel= 'stylesheet';
+			ele.href = stylesheet;
+			head.appendChild(ele);
+		})
 
-	window.document.documentElement.replaceChild( 
-			newBody,
-			window.document.body
-			)
-	
-
-	// replace head
-	//var newHead = document.createElement('head');
-	var newHead = document.head.cloneNode();
-	newHead.innerHTML= Jsdom.jsdom(headHtml).parentWindow.document.head.innerHTML;
-
-	// insert scripts
-	scripts= scripts || [];
-	scripts.forEach(function (script) {
-		var ele = window.document.createElement("script");
-		ele.src = script;
-		ele.type="text/javascript";
-		newHead.appendChild(ele);
+		//return {html: window.document.documentElement.outerHTML, skip: bodyHbs.skip};
+		return window.document.documentElement.outerHTML;
 	})
-	// insert stylesheets
-	stylesheets= stylesheets || [];
-	stylesheets.forEach(function (stylesheet) {
-		var ele = window.document.createElement("link");
-		ele.rel= 'stylesheet';
-		ele.href = stylesheet;
-		newHead.appendChild(ele);
-	})
-
-	window.document.documentElement.replaceChild( 
-		newHead,
-		window.document.head
-		)
-
-
-	//return {html: window.document.documentElement.outerHTML, skip: bodyHbs.skip};
-	return window.document.documentElement.outerHTML;
 }
 
 
