@@ -247,23 +247,6 @@ function wrapNodes (programNode, num, arr, preTag, preAttr, preNode, doms) {
 				// add cn-block tag wrap the each node
 				var eachBool= (node.mustache.id.string=='each' && num==0);
 				if(eachBool){
-					/*var parent= doms[doms.length-1];
-					var tag= parent.dom;
-					var tagIdx= parent.node.string.lastIndexOf(tag)+tag.length;
-					var param= node.mustache.params[0].string;
-					var idx= ret.indexOf(parent.node);
-					// slice the string to only preTag, and cn-key
-					// insert content  '"' + preNode.string.slice(tagIdx);
-					var original= parent.node.string;
-					parent.node.string= original.slice(0,tagIdx) + ' cn-each="';
-
-					// splice
-					ret.splice(idx+1,0, contextPathNode());
-
-					// content
-					var str= '.'+param+'"'+original.slice(tagIdx);
-					ret.splice(idx+2, 0, contentNode(str));*/
-
 					var tag= '<x-cn type="block" cn-key="';
 					ret.push(contentNode(tag));
 
