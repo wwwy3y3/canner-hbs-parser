@@ -1,6 +1,10 @@
 var cnHbs= require('../');
 var path= require('path');
 var Handlebars= require('handlebars');
+var hbsHelpers = require('hbs-helper').getHelper(); 
+for (var i in hbsHelpers) {
+      hbsHelpers[i](Handlebars);
+    }
 var source = "{{{name}}}<p id='{{cool}}'>Hello, my name is {{name}}. I am from {{hometown}}. I have " +
              "{{kids.length}} kids:</p>" +
              "<ul>{{#each kids}}<li>{{name}} is {{age}}</li>, also have {{#each toy}}*{{this}}{{/each}}{{/each}}, also got {{#each pets}}name: {{name}}, age: {{age}}; {{/each}}</ul>, so hometown: {{hometown}}";
@@ -54,7 +58,7 @@ var opts= {
 			type: 'hidden',
 			value: false
 		}],
-	banner: true
+	Handlebars: Handlebars
 }
 var hbsParse= cnHbs.cnWrapHtml(content, json.data, ["/javascripts/dist/apps_main/create.js"], ["/stylesheets/cans/create/create.css"], opts);
 console.log(hbsParse);

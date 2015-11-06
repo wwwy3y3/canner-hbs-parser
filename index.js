@@ -7,7 +7,6 @@ var Promise= require('bluebird');
 var jQpath= path.resolve(__dirname, './lib/jquery-2.1.4.min.js');
 var jQuery= require('jquery');
 var cheerio= require('cheerio');
-var hbsHelpers = require('hbs-helper').getHelper();
 //var jquery = fs.readFileSync(path.resolve(__dirname, './lib/jquery-2.1.4.min.js'), {encoding: 'utf-8'});
 
 // regex
@@ -35,7 +34,9 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
 	var hbsOpts= (opts && opts.hbs)
 		? _.merge({trackIds: true}, opts.hbs)
 		: {trackIds: true};
-
+	if(opts.Handlebars)
+		var Handlebars= opts.Handlebars;
+	console.log(Handlebars)
 	var $= cheerio.load(source);
 
 	var $body= $('body');
