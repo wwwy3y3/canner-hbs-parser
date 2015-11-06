@@ -1,13 +1,13 @@
 var Handlebars= require('handlebars');
-var Jsdom= require('jsdom');
 var schemar= require('schemar');
 var fs= require('fs');
 var _= require('lodash');
 var path= require('path');
 var Promise= require('bluebird');
-Promise.promisifyAll(Jsdom);
 var jQpath= path.resolve(__dirname, './lib/jquery-2.1.4.min.js');
 var jQuery= require('jquery');
+var cheerio= require('cheerio');
+var hbsHelpers = require('hbs-helper').getHelper();
 //var jquery = fs.readFileSync(path.resolve(__dirname, './lib/jquery-2.1.4.min.js'), {encoding: 'utf-8'});
 
 // regex
@@ -35,69 +35,58 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
 	var hbsOpts= (opts && opts.hbs)
 		? _.merge({trackIds: true}, opts.hbs)
 		: {trackIds: true};
+
+	var $= cheerio.load(source);
+
+	var $body= $('body');
+	var $head= $('head');
+
+	// body html
+	var bodyHbs= exports.cnWrap($body.html());
+	var template= Handlebars.compile(bodyHbs.node, hbsOpts)
+	var bodyHtml= template(data);
+	$body.html(bodyHtml);
+
+	// head
+	var headHbs= $('head').html();
+	var headHtml= Handlebars.compile(headHbs)(data);
+
+	// replace head
+	$head.html(headHtml);
+
+	// replace body innerHTML
+	// append hidden value- token
 	
-	return Jsdom.envAsync(
-	  source
-	).then(function (window) {
-		var $= jQuery(window);
-		var body= window.document.body;
-		var head= window.document.head;
+	if(opts && opts.token){
+		$body.prepend('<input type="hidden" id="api-token" value="'+opts.token+'" />');
+	}
 
-		// body html
-		var bodyHbs= exports.cnWrap(body.innerHTML);
-		var template= Handlebars.compile(bodyHbs.node, hbsOpts)
-		var bodyHtml= template(data);
-		body.innerHTML= bodyHtml;
-
-		// head
-		var headHbs= $('head').html();
-		var headHtml= Handlebars.compile(headHbs)(data);
-
-		// replace head
-		head.innerHTML= headHtml;
-
-		// replace body innerHTML
-		// append hidden value- token
-		
-		if(opts && opts.token){
-			$('body').prepend('<input type="hidden" id="api-token" value="'+opts.token+'" />');
-		}
-
-		// append body
-		if(opts && opts.insertBody){
-			opts.insertBody.forEach(function (element) {
-				var ele = window.document.createElement(element.tag);
-				for(key in element){
-					ele[key]= element[key];
-					if(key=='value')
-						ele.setAttribute('value', element[key]);
-				}
-					
-				$('body').append(ele);
-			})
-		}
-
-		// insert scripts
-		scripts= scripts || [];
-		scripts.forEach(function (script) {
-			var ele = window.document.createElement("script");
-			ele.src = script;
-			ele.type="text/javascript";
-			head.appendChild(ele);
+	// append body
+	if(opts && opts.insertBody){
+		opts.insertBody.forEach(function (element) {
+			var html= tagBuilder(element.tag, element);
+			var $ele = cheerio.parseHTML(html.start+html.end);
+			$body.append($ele);
 		})
-		
-		// insert stylesheets
-		stylesheets= stylesheets || [];
-		stylesheets.forEach(function (stylesheet) {
-			var ele = window.document.createElement("link");
-			ele.rel= 'stylesheet';
-			ele.href = stylesheet;
-			head.appendChild(ele);
-		})
+	}
 
-		//return {html: window.document.documentElement.outerHTML, skip: bodyHbs.skip};
-		return window.document.documentElement.outerHTML;
+	// insert scripts
+	scripts= scripts || [];
+	scripts.forEach(function (script) {
+		var html= tagBuilder("script", {src: script, type: "text/javascript"});
+		var $ele = cheerio.parseHTML(html.start, true);
+		$head.append($ele);
 	})
+	
+	// insert stylesheets
+	stylesheets= stylesheets || [];
+	stylesheets.forEach(function (stylesheet) {
+		var html= tagBuilder("link", {rel: "stylesheet", href: stylesheet});
+		var $ele = cheerio.parseHTML(html.start, true);
+		$head.append($ele);
+	})
+	
+	return $.html();
 }
 
 

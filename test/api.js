@@ -35,8 +35,8 @@ console.log(
 */
 
 // test cnWrapHtml
-var json= require(path.resolve(__dirname, './can/shopper.json'))
-var content= require('fs').readFileSync(path.resolve(__dirname, './can/shopper.hbs'), 'utf8');
+var json= require(path.resolve(__dirname, './can/canner.json'))
+var content= require('fs').readFileSync(path.resolve(__dirname, './can/index.hbs'), 'utf8');
 var opts= {
 	token: '123123',
 	insertBody: [
@@ -57,10 +57,6 @@ var opts= {
 	banner: true
 }
 var hbsParse= cnHbs.cnWrapHtml(content, json.data, ["/javascripts/dist/apps_main/create.js"], ["/stylesheets/cans/create/create.css"], opts);
-hbsParse.then(function (result) {
-	console.log(result)
-}).catch(function (err) {
-	console.log(err.stack)
-})
+console.log(hbsParse);
 //console.log(result);
 //console.log(cnHbs.cnWrapHtml(html, { alt: "123", src: "1234" }))

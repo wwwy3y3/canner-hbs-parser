@@ -1,128 +1,717 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" class=" js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths"><head class="head yo"><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
-
-
-   <title>{{title}}</title>
-   <meta name="description" content="{{description}}">
-  
-  <link rel="stylesheet" href="./public/style3.css">
-  <link href="./public/css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" type="/text/css" href="./public/MyFontsWebfontsKit.css">
-     <link rel="icon" type="image/png" href="{{icon}}">
-    <script src="./public/jquery.min.js"></script>
-    <script src="./public/modernizr.js"></script> <!-- Modernizr -->
-    <script src="./public/jquery.hover.js"></script>
-    <style id="style-1-cropbar-clipper">
-      .en-markup-crop-options {
-          top: 18px !important;
-          left: 50% !important;
-          margin-left: -100px !important;
-          width: 200px !important;
-          border: 2px rgba(255,255,255,.38) solid !important;
-          border-radius: 4px !important;
-      }
-
-      .en-markup-crop-options div div:first-of-type {
-          margin-left: 0px !important;
-      }
-    </style>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{#resume.basics}}{{name}}{{/resume.basics}}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- link rel="shortcut icon" href="favicon.ico" / -->
+    <link rel="stylesheet" href="./index.css">
   </head>
 
-<body class="mybody hi">
+  <body itemscope itemtype="http://schema.org/Person">
+    <script>
+    $('#horizontalTab').easyResponsiveTabs();
+      window.onload = function () {
+        var toggleFloatingMenu = function() {
+          $( '.js-floating-nav' ).toggleClass( 'is-visible' );
+          $( '.js-floating-nav-trigger' ).toggleClass( 'is-open' );
+        };
 
-<a href="{{link}}">links</a>
-
-<a class="this, thumb" onclick='smoothScroll(document.getElementById("profile"))'>
-<div id="hero1" class="hero" style="height: 684px; background: rgb(238, 75, 84);">
-
-<img src="./public/eye.gif" id="big-img4" class="eye" style="display: none;"><img src="./public/eye2.gif" id="big-img5" class="eye" style="display: none;">
-<img src="./public/arrow-white.png" id="big-img3">
-
-
-<h6 style="color: #f7f5f5;">
-{{greeting}}
-</h6>
-
-
-</div>
- </a>
- 
- 
- 
-<a class="this, thumb" onclick="smoothScroll(document.getElementById(&#39;p106&#39;))">
-<div id="profile" class="hero" style="height: 684px;">
-
-<img src="./public/arrow-red.png" id="big-img3" class="arrow" style="display: none;">
-<img src="{{icon}}">
-<h1 style="color: #ee4b54;">
-{{profile}}
-</h1>
-
-
-</div>
- </a>
-
-
-
-
- 
- <header>
-    
-    <a id="cd-menu-trigger" class="thumb" style="display: none;"><span class="cd-menu-text"><h5>Index</h5></span></a>
-       
- <a href="javascript:void(null)" onclick='smoothScroll(document.getElementById("contact"))' class="thumb one" id="abc" style="display: none;"><h5>Info.</h5></a>
-
-  </header>
-    
-    
-
-
-
-<main class="cd-main-content">
-<div id="content">
-  {{#each projects}}
-    <div class="projects" id="{{anchor}}">
-      <div style="background: {{bg-color}};"> 
-        <h2>{{title}}</h2>
-        <h4>{{subtitle}}</h4>
-        {{#each images}}
-          <img src="{{this}}" class="big-img2">
-        {{/each}}
-      </div>
-  </div> 
-  {{/each}}
-           
-  <div class="projects" id="contact">
-    <div style="background: #f7f5f5">
-    <h2>&#9786;</h2>
-    <h4 style="text-align:left;">{{contact}} <br><br><br><br></h4>
-    </div>
-  </div>
-
-</div>
-
-
-
-</main> <!-- cd-main-content -->
-
-  <nav id="cd-lateral-nav" style="display: none;">
-  
-    <ul class="cd-navigation cd-single-item-wrapper">
-      {{#each projects}}
-      <li>
-        <a href="javascript:void(null)" class="this" onclick='smoothScroll(document.getElementById("{{anchor}}"))'>
-          <h3>{{nav-title}}</h3>
+        $( ".background-card" ).css( "min-height", window.screen.availHeight + "px" );
+        $( "[rel=tooltip]" ).tooltip();
+        $( '.js-floating-nav-trigger' ).on( 'click', function(e) {
+          e.preventDefault();
+          toggleFloatingMenu();
+        });
+        $( '.js-floating-nav a' ).on( 'click', toggleFloatingMenu );
+      }
+    </script>
+    <div class="container-fluid">
+      <div class="row main clearfix">
+        <a href="#" class="js-floating-nav-trigger floating-nav-trigger">
+          <i class="fa fa-bars"></i>
+          <span class="close-icon">&times;</span>
         </a>
-      </li>
-      {{/each}}
-    </ul> <!-- cd-single-item-wrapper -->
+        <nav class="floating-nav js-floating-nav">
+          <ul class="list-unstyled">
+            {{#if resume.basics.summary}}
+            <li>
+              <a href="#about">
+                <i class="fa fa-user"></i>
+                關於
+              </a>
+            </li>
+            {{/if}}
+            {{#if resume.work}}
+            <li>
+              <a href="#work-experience">
+                <i class="fa fa-building"></i>
+                工作經歷
+              </a>
+            </li>
+            {{/if}}
+            {{#if resume.skills}}
+            <li>
+              <a href="#skills">
+                <i class="fa fa-code"></i>
+                工作技能
+              </a>
+            </li>
+            {{/if}}
+            {{#if resume.education}}
+            <li>
+              <a href="#education">
+                <i class="fa fa-mortar-board"></i>
+                學歷
+              </a>
+            </li>
+            {{/if}}
+            {{#if resume.awards}}
+              <li>
+                <a href="#awards">
+                  <i class="fa fa-trophy"></i>
+                  獎項
+                </a>
+              </li>
+            {{/if}}
+            {{#if resume.volunteer}}
+              <li>
+                <a href="#volunteer-work">
+                  <i class="fa fa-child"></i>
+                  自願服務
+                </a>
+              </li>
+            {{/if}}
+            {{#if resume.publications}}
+              <li>
+                <a href="#publications">
+                  <i class="fa fa-book"></i>
+                  刊物
+                </a>
+              </li>
+            {{/if}}
+            {{#if resume.interests}}
+              <li>
+                <a href="#interests">
+                  <i class="fa fa-heart"></i>
+                  興趣
+                </a>
+              </li>
+            {{/if}}
+            {{#if resume.references}}
+              <li>
+                <a href="#references">
+                  <i class="fa fa-thumbs-up"></i>
+                  參考
+                </a>
+              </li>
+            {{/if}}
+          </ul>
+        </nav>
 
-    
-  </nav>
-  
-<script src="./public/jquery.min(1).js"></script>
-<script src="./public/main.js"></script> <!-- Resource jQuery -->
+        <section class="col-md-3 card-wrapper profile-card-wrapper affix">
+          <div class="card profile-card">
+              <span class="profile-pic-container">
+                <div class="profile-pic">
+                  <img class="media-object img-circle center-block"  data-src="holder.js/100x100" alt="{{resume.basics.name}}" src="{{resume.basics.picture}}" itemprop="image">
+                </div>
 
+                <div class="name-and-profession">
+                  <h3 class="text-center text-bolder name" itemprop="name"> {{resume.basics.name}}</h3>
+                  <h5 class="text-muted text-center" itemprop="jobTitle">{{resume.basics.label}}</h5>
+                </div>
+              </span>
+              <hr>
 
-</body></html>
+              <div class="contact-details clearfix">
+
+                {{#if resume.basics.location}}
+                  <div class="detail">
+                    <span class="icon">
+                      <i class="fa fa-lg fa-location-arrow"></i>
+                    </span>
+                    <span class="info">
+                      {{resume.basics.location.city}}
+                    </span>
+                  </div>
+                {{/if}}
+
+                {{#if resume.basics.phone}}
+                  <div class="detail">
+                    <span class="icon">
+                      <i class="fa fa-lg fa-phone"></i>
+                    </span>
+
+                    <span class="info" itemprop="telephone">
+                      {{resume.basics.phone}}
+                    </span>
+                  </div>
+                {{/if}}
+
+                {{#if resume.basics.email}}
+                  <div class="detail">
+                    <span class="icon">
+                      <i class="fa fa-lg fa-envelope"></i>
+                    </span>
+
+                    <span class="info">
+                      <a href="mailto:{{resume.basics.email}}" class="link-disguise" itemprop="email">{{resume.basics.email}}</a>
+                    </span>
+                  </div>
+                {{/if}}
+
+                {{#if resume.basics.website}}
+                  <div class="detail">
+                    <span class="icon">
+                      <i class="fa fa-lg fa-link"></i>
+                    </span>
+
+                    <span class="info">
+                      <a href="{{resume.basics.website}}" target="_blank">{{resume.basics.website}}</a>
+                    </span>
+                  </div>
+                {{/if}}
+
+                {{#if resume.basics.languages}}
+                  <div class="detail">
+                    <span class="icon" title="Languages I speak">
+                      <i class="fa fa-lg fa-language"></i>
+                    </span>
+
+                    <span class="info">
+                      {{resume.basics.languages}}
+                    </span>
+                  </div>
+                {{/if}}
+              </div>
+
+              <hr>
+
+              <div class="social-links text-center">
+                {{#if resume.basics.linkedin_url}}
+                  <a class="fa fa-linkedin fa-2x social-link link-linkedin"
+                       href="{{resume.basics.linkedin_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.github_url}}
+                  <a class="fa fa-github fa-2x social-link link-github"
+                       href="{{resume.basics.github_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.bitbucket_url}}
+                  <a class="fa fa-bitbucket fa-2x social-link link-bitbucket" href="{{resume.basics.bitbucket_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.gratipay_url}}
+                  <a class="fa fa-gratipay fa-2x social-link link-gratipay"
+                       href="{{resume.basics.gratipay_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.stackoverflow_url}}
+                  <a class="fa fa-stack-overflow fa-2x social-link link-stackoverflow"
+                       href="{{resume.basics.stackoverflow_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.stackexchange_url}}
+                  <a class="fa fa-stack-exchange fa-2x social-link link-stackexchange"
+                       href="{{resume.basics.stackexchange_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.codepen_url}}
+                  <a class="fa fa-codepen fa-2x social-link link-codepen" href="{{resume.basics.codepen_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.skype_url}}
+                  <a class="fa fa-skype fa-2x social-link link-skype"
+                       href="{{resume.basics.skype_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.twitter_url}}
+                  <a class="fa fa-twitter fa-2x social-link link-twitter"
+                       href="{{twitter_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.facebook_url}}
+                  <a class="fa fa-facebook-square fa-2x social-link link-facebook" href="{{resume.basics.facebook_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.youtube_url}}
+                  <a class="fa fa-youtube fa-2x social-link link-youtube" href="{{youtube_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.soundcloud_url}}
+                  <a class="fa fa-soundcloud fa-2x social-link link-soundcloud"
+                       href="{{resume.basics.soundcloud_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.googleplus_url}}
+                  <a class="fa fa-google-plus-square fa-2x social-link link-googleplus" href="{{resume.basics.googleplus_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.pinterest_url}}
+                  <a class="fa fa-pinterest fa-2x social-link link-pinterest" href="{{resume.basics.pinterest_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.instagram_url}}
+                  <a class="fa fa-instagram fa-2x social-link link-instagram" href="{{resume.basics.instagram_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.vimeo_url}}
+                  <a class="fa fa-vimeo-square fa-2x social-link link-vimeo" href="{{resume.basics.vimeo_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.behance_url}}
+                  <a class="fa fa-behance fa-2x social-link link-behance" href="{{resume.basics.behance_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.foursquare_url}}
+                  <a class="fa fa-foursquare fa-2x social-link link-foursquare" href="{{resume.basics.foursquare_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.reddit_url}}
+                  <a class="fa fa-reddit fa-2x social-link link-reddit" href="{{resume.basics.reddit_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.spotify_url}}
+                  <a class="fa fa-spotify fa-2x social-link link-spotify" href="{{resume.basics.spotify_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.lastfm_url}}
+                  <a class="fa fa-lastfm fa-2x social-link link-lastfm" href="{{resume.basics.lastfm_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.tumblr_url}}
+                  <a class="fa fa-tumblr-square fa-2x social-link link-tumblr" href="{{resume.basics.tumblr_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.dribble_url}}
+                  <a class="fa fa-dribble fa-2x social-link link-dribbble" href="{{resume.basics.dribble_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.dribbble_url}}
+                  <a class="fa fa-dribbble fa-2x social-link link-dribbble" href="{{resume.basics.dribbble_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.angellist_url}}
+                  <a class="fa fa-angellist fa-2x social-link link-angellist" href="{{resume.basics.angellist_url}}" target="_blank"></a>
+                {{/if}}
+                {{#if resume.basics.hackernews_url}}
+                  <a class="fa fa-hacker-news fa-2x social-link link-hackernews" href="{{resume.basics.hackernews_url}}" target="_blank"></a>
+                {{/if}}
+              </div>
+          </div>
+
+        </section>
+
+        <section class="col-md-9 card-wrapper pull-right">
+          <div class="card background-card">
+            <h4 class="text-uppercase text-bolder">Background</h4>
+            <hr>
+
+            <div class="background-details">
+              {{#if resume.basics.summary}}
+              <div class="detail" id="about">
+                <div class="icon">
+                  <i class="fa fa-lg fa-user"></i>
+                  <span class="mobile-title">關於</span>
+                </div>
+                <div class="info">
+                  <h4 class="title text-uppercase">
+                    關於
+                  </h4>
+
+                  <div class="content" itemprop="description">
+                    {{resume.basics.summary}}
+                  </div>
+                </div>
+              </div>
+              {{/if}}
+
+              {{#if resume.work}}
+              <div class="detail" id="work-experience">
+                <div class="icon">
+                  <i class="fa fa-lg fa-building"></i>
+                  <span class="mobile-title">工作經驗</span>
+                </div>
+                <div class="info">
+                  <h4 class="title text-uppercase">
+                    工作經驗
+                  </h4>
+
+                  <ul class="list-unstyled">
+                    {{#each resume.work}}
+                      <li class="card card-nested clearfix">
+                        <div class="content">
+                          <p class="clear-margin relative">
+                            {{#unless endDate}}
+                              <i class="fa fa-circle current-event"
+                                 rel="tooltip" title="目前工作" data-placement="left"></i>
+                            {{/unless}}
+                            <strong>{{position}}</strong>,&nbsp;
+                            {{#if website}}
+                              <a href="{{website}}"  target="_blank">{{company}}</a>
+                            {{else}}
+                              {{company}}
+                            {{/if}}
+                          </p>
+                          <p class="text-muted">
+                            <small>
+                              <span class="space-right">
+                                {{startDate}} -
+                                {{#if endDate}}
+                                  {{endDate}}
+                                {{else}}
+                                  Present
+                                {{/if}}
+                              </span>
+
+                              {{#if duration}}
+                                <span>
+                                  <i class="fa fa-clock-o icon-left"></i>
+                                  {{duration}}
+                                </span>
+                              {{/if}}
+                            </small>
+                          </p>
+                          <p>{{summary}}</p>
+                          {{#if highlights}}
+                            <ul>
+                              {{#each highlights}}
+                                <li> {{.}} </li>
+                              {{/each}}
+                            </ul>
+                          {{/if}}
+                        </div>
+                      </li>
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+              {{/if}}
+
+              {{#if resume.skills}}
+                <div class="detail" id="skills">
+                  <div class="icon">
+                    <i class="fa fa-lg fa-code"></i>
+                    <span class="mobile-title">工作技能</span>
+                  </div>
+                  <div class="info">
+                    <h4 class="title text-uppercase">
+                      工作技能
+                    </h4>
+
+                    <div class="content">
+                      <ul class="list-unstyled">
+                        {{#each resume.skills}}
+                          <li class="card card-nested card-skills">
+                            {{#if display_progress_bar}}
+                              <div class="skill-level" rel="tooltip" title="{{level}}" data-placement="left">
+                                <div class="skill-progress {{skill_class}}">
+                                </div>
+                              </div>
+                            {{/if}}
+                            <div class="skill-info">
+                              <strong>{{name}}</strong>
+
+                              <div class="space-top labels">
+                                {{#each keywords}}
+                                  <span class="label label-keyword">{{this}}</span>
+                                {{/each}}
+                              </div>
+                            </div>
+                          </li>
+                        {{/each}}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              {{/if}}
+
+              {{#if resume.education}}
+              <div class="detail" id="education">
+                <div class="icon">
+                  <i class="fa fa-lg fa-mortar-board"></i>
+                  <span class="mobile-title">學歷</span>
+                </div>
+                <div class="info">
+                  <h4 class="title text-uppercase">
+                    學歷
+                  </h4>
+
+                  <div class="content">
+                    <ul class="list-unstyled">
+                      {{#each resume.education}}
+                        <li class="card card-nested">
+                          <div class="content">
+                            <p class="clear-margin relative">
+                              {{#unless endDate}}
+                                <i class="fa fa-circle current-event"
+                                   rel="tooltip" title="Currently Pursuing" data-placement="left"></i>
+                              {{/unless}}
+
+                              <strong>{{area}}, {{studyType}}</strong>,&nbsp;
+                              {{institution}}
+                            </p>
+                            <p class="text-muted">
+                              <small>
+                                {{startDate}} -
+                                {{#if endDate}}
+                                  {{endDate}}
+                                {{else}}
+                                  Present
+                                {{/if}}
+                              </small>
+                            </p>
+                            <i>{{gpa}}</i>
+                            <div class="space-top labels">
+                              {{#each courses}}
+                                <span class="label label-keyword">{{this}}</span>
+                              {{/each}}
+                            </div>
+                          </div>
+                        </li>
+                      {{/each}}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              {{/if}}
+
+              {{#if resume.awards}}
+                <div class="detail" id="awards">
+                  <div class="icon">
+                    <i class="fa fa-lg fa-trophy"></i>
+                    <span class="mobile-title">獎項</span>
+                  </div>
+                  <div class="info">
+                    <h4 class="title text-uppercase">
+                      獎項
+                    </h4>
+
+                    <div class="content">
+                      <ul class="list-unstyled">
+                        {{#each resume.awards}}
+                          <li class="card card-nested">
+                            <div class="content">
+                              <p class="clear-margin" itemprop="award">
+                                <strong>{{title}}</strong>,&nbsp;
+                                {{awarder}}
+                              </p>
+                              <p class="text-muted">
+                                <small>
+                                  頒獎日: {{date}}
+                                </small>
+                              </p>
+                              <p class="clear-margin"> {{summary}} </p>
+                            </div>
+                          </li>
+                        {{/each}}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              {{/if}}
+
+              {{#if resume.volunteer}}
+                <div class="detail" id="volunteer-work">
+                  <div class="icon">
+                    <i class="fa fa-lg fa-child"></i>
+                    <span class="mobile-title">自願服務</span>
+                  </div>
+                  <div class="info">
+                    <h4 class="title text-uppercase">
+                      自願服務
+                    </h4>
+
+                    <div class="content">
+                      <ul class="list-unstyled">
+                        {{#each resume.volunteer}}
+                          <li class="card card-nested">
+                            <div class="content">
+                              <p class="clear-margin relative">
+                                {{#unless endDate}}
+                                  <i class="fa fa-circle current-event"
+                                     rel="tooltip" title="目前的自願服務" data-placement="left"></i>
+                                {{/unless}}
+
+                                <strong>{{position}}</strong>,&nbsp;
+                                {{#if website}}
+                                  <a href="{{website}}"  target="_blank">{{organization}}</a>
+                                {{else}}
+                                  {{organization}}
+                                {{/if}}
+                              </p>
+                              <p class="text-muted">
+                                <small>
+                                  {{startDate}} -
+                                  {{#if endDate}}
+                                    {{endDate}}
+                                  {{else}}
+                                    現在
+                                  {{/if}}
+                                </small>
+                              </p>
+                              <p>{{summary}}</p>
+                              <ul>
+                                {{#each highlights}}
+                                  <li> {{this}} </li>
+                                {{/each}}
+                              </ul>
+                            </div>
+                          </li>
+                        {{/each}}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              {{/if}}
+
+              {{#if resume.publications}}
+                <div class="detail" id="publications">
+                  <div class="icon">
+                    <i class="fa fa-lg fa-book"></i>
+                    <span class="mobile-title">刊物</span>
+                  </div>
+                  <div class="info">
+                    <h4 class="title text-uppercase">
+                      刊物
+                    </h4>
+
+                    <div class="content">
+                      <ul class="list-unstyled">
+                        {{#each resume.publications}}
+                          <li class="card card-nested">
+                            <div class="content">
+                              <p class="clear-margin">
+                                <strong>
+                                  {{#if website}}
+                                    <a href="{{website}}"  target="_blank">{{name}}</a>
+                                  {{else}}
+                                    {{name}}
+                                  {{/if}}
+                                </strong>,&nbsp;
+                                {{publisher}}
+                              </p>
+                              <p class="text-muted">
+                                <small>
+                                  刊出日: {{releaseDate}}
+                                </small>
+                              </p>
+                              <p class="clear-margin">{{summary}}</p>
+                            </div>
+                          </li>
+                        {{/each}}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              {{/if}}
+
+              {{#if resume.interests}}
+                <div class="detail" id="interests">
+                  <div class="icon">
+                    <i class="fa fa-lg fa-heart"></i>
+                    <span class="mobile-title">興趣</span>
+                  </div>
+                  <div class="info">
+                    <h4 class="title text-uppercase">
+                      興趣
+                    </h4>
+
+                    <div class="content">
+                      <ul class="list-unstyled">
+                        {{#each resume.interests}}
+                          <li class="card card-nested">
+                            <p>
+                              <strong>{{name}}</strong>
+                            </p>
+
+                            <div class="space-top labels">
+                              {{#each keywords}}
+                                <span class="label label-keyword">{{this}}</span>
+                              {{/each}}
+                            </div>
+                          </li>
+                        {{/each}}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              {{/if}}
+
+              {{#if resume.references}}
+                <div class="detail" id="references">
+                  <div class="icon">
+                    <i class="fa fa-lg fa-thumbs-up"></i>
+                    <span class="mobile-title">參考</span>
+                  </div>
+                  <div class="info">
+                    <h4 class="title text-uppercase">
+                      參考
+                    </h4>
+
+                    <div class="content">
+                      <ul class="list-unstyled">
+                        {{#each resume.references}}
+                          <li class="card card-nested">
+                            <p>
+                              <strong>{{name}}</strong>
+                            </p>
+                            <blockquote class="quote">
+                              <p class="clear-margin">{{reference}}</p>
+                            </blockquote>
+                          </li>
+                        {{/each}}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              {{/if}}
+
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <a href="//canner.io" class="ribbon-container" target="_blank">
+        <span class="ribbon">powered by Canner</span>
+    </a>
+    <style>
+      .ribbon-container {
+          z-index: 100000;
+          position: relative;
+          display: inline-block;
+          line-height: 1;
+      }
+
+      .ribbon {
+          position: fixed;
+          bottom: 1em;
+          left: 0;
+          margin-right: 1em;
+          padding: .75em 1.25em .75em .75em;
+          border-radius: 0 .5em .5em 0;
+          background-color: #39f;
+          background-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,.1) 100%);
+          box-shadow: inset 0 .062em 0 rgba(255,255,255,.6), 0 .125em .25em rgba(0,0,0,.2);
+          color: #fff;
+          text-shadow: 0 -.062em 0 rgba(0,0,0,.2);
+          white-space: nowrap;
+          transition: background-color .2s ease-in-out;
+      }
+
+      .ribbon:before,
+      .ribbon:after {
+          position: absolute;
+          background-color: inherit;
+          content: "";
+      }
+
+      .ribbon:before {
+          bottom: 0;
+          left: -.5em;
+          width: .5em;
+          height: 3em;
+          border-radius: 0 0 0 .5em;
+          background-image: linear-gradient(to right, rgba(0,0,0,.2) 0%, rgba(0,0,0,0) 100%);
+      }
+
+      .ribbon:after {
+          top: -1em;
+          left: -.5em;
+          width: .5em;
+          height: 1em;
+          border-radius: .5em 0 0 .5em;
+          background-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,.2) 100%);
+          box-shadow: 0 .062em 0 rgba(255,255,255,.6);
+      }
+
+      .ribbon-container:hover .ribbon {
+          background-color: #7acc29;
+      }
+    </style>
+
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/tooltip.js"></script>
+  </body>
+</html>
