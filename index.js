@@ -36,7 +36,7 @@ exports.cnWrapHtml= function (source, data, scripts, stylesheets, opts) {
 		: {trackIds: true};
 	if(opts.Handlebars)
 		var Handlebars= opts.Handlebars;
-	console.log(Handlebars)
+	
 	var $= cheerio.load(source);
 
 	var $body= $('body');
